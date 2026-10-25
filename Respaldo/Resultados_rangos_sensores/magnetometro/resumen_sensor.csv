@@ -1,0 +1,2 @@
+﻿sensor;archivo;filas;variables_detectadas;filas_evaluables;normal;alerta;critico_estadistico;sin_referencia_o_dato;porcentaje_alerta_evaluables;porcentaje_critico_evaluables;cobertura_parcial
+magnetometro;03_magnetometro_smp_ordenado.csv;143561;3;143561;141920;1622;19;0;1,13;0,013;False

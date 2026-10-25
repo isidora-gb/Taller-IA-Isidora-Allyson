@@ -1,0 +1,4 @@
+﻿fila_excel;campo;valor_asignado;metodo;filas_fuente;observacion
+143562;MagneZ_SisGenEol;1,0788;Media de dos últimas muestras previas del mismo campo;143560 y 143561;"Estimado; no es una medición observada"
+143562;Ter_SisGenEol;14,375;Media de dos últimas muestras previas del mismo campo;143560 y 143561;"Estimado; no es una medición observada"
+143562;smp_continuo;165268;Avance unitario estimado desde SMP observado anterior;143561;"SMP original ausente; se estima el siguiente contador módulo 65536: 34196"

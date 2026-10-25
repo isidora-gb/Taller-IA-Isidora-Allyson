@@ -1,0 +1,21 @@
+﻿ANALISIS MAGNETOMETRO - METODO 6 SIGMA
+Archivo de entrada: C:\Users\isigb\OneDrive\Desktop\Taller ia 2\Datos_corregidos\03_magnetometro_smp_ordenado.csv
+Carpeta resultados: C:\Users\isigb\OneDrive\Desktop\Taller ia 2\Resultados_magnetometro
+Registros: 143561
+Atipicos por eje: X=0, Y=0, Z=0
+Filas con al menos un eje atipico: 0
+smp_original: 1 invalidos; 0 decimales; 2 reinicios probables de contador de 16 bits.
+smp_continuo: 351 saltos superiores a uno.
+
+METODOLOGIA
+- Se usa la media global +/- 6 veces la desviacion estandar muestral por eje.
+- Un valor fuera del intervalo es marcado, NO se considera necesariamente un error.
+- El CSV tratado reemplaza por NaN solo las celdas identificadas.
+- Se conservan las 3 columnas: smp_original, smp_continuo y smp_desde_cero.
+- Los graficos de series usan smp_desde_cero; no es tiempo en segundos.
+- Se generan 6 graficos adicionales comparando los tres SMP.
+- Los reinicios y saltos del contador se documentan, no se corrigen de nuevo.
+- La correlacion de Pearson usa los pares de valores disponibles.
+- El boxplot aplica criterio IQR, que NO equivale a 6 sigma.
+- No se infiere frecuencia de muestreo, tiempo real ni necesidad de mantenimiento con estos datos.
+- El tratamiento 6 sigma no debe reemplazar inspeccion de eventos/anomalias reales.

@@ -1,0 +1,4 @@
+﻿Los graficos conservan las mediciones del giroscopio.
+SMP es contador de muestras; no equivale a tiempo en segundos.
+Los valores invalidos reconstruidos representan estimaciones.
+Dos regiones con el mismo smp_original pueden ser registros distintos por desbordamiento.

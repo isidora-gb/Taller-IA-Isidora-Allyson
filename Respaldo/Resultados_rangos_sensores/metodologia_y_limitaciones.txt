@@ -1,0 +1,42 @@
+TALLER IA 2 — RANGOS DE ANOMALÍAS EXPLORATORIOS
+
+ENTRADAS: cuatro CSV de acelerómetro, giroscopio, magnetómetro y temperatura,
+corregidos estructuralmente mediante el código 00 y anteriores a cualquier eliminación de atípicos por 6 sigma.
+Los archivos originales NO se editan y las filas NO se emparejan entre sensores.
+
+ESTADÍSTICA (por columna, usando sus propios datos):
+    Mediana = mediana(x)
+    MAD = mediana(|x - mediana(x)|)
+    Z modificado = 0.6745*(x - mediana)/MAD
+
+    NORMAL:                  |Z modificado| <= 3.5
+    ALERTA:                   3.5 < |Z modificado| <= 6.0
+    CRITICO_ESTADISTICO:      |Z modificado| > 6.0
+    SIN_REFERENCIA:          MAD=0 o menos de 10 valores válidos.
+    SIN_DATO:                dato numérico inexistente o no interpretable.
+
+La regla de |Z| > 3.5 se utiliza para DETECTAR POSIBLES VALORES ATÍPICOS,
+no para declarar fallas. Fuente: NIST Engineering Statistics Handbook,
+'Outlier Detection', https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h.htm
+El umbral |Z| > 6 y la clasificación en tres niveles son PROPUESTAS
+EXPLORATORIAS del proyecto, NO límites físicos ni criterios de fabricante.
+Los límites numéricos por variable se obtienen como mediana ± (3.5 o 6)*MAD/0.6745.
+
+INTERPRETACIÓN:
+- 'Crítico estadístico' no equivale a daño, riesgo de seguridad ni necesidad
+  confirmada de mantenimiento.
+- Los límites calculados reflejan esta base, que NO está certificada como
+  datos de operación sana. Se requiere validar con inspecciones y datos de falla.
+- La temperatura se registra en su propia escala; nunca se supone que todas
+  las magnitudes miden vibración.
+- SMP es un ÍNDICE, no minutos, segundos ni fechas. Los episodios consecutivos
+  se cuentan por filas en el orden almacenado, no por tiempo transcurrido.
+- Las cuatro series no se sincronizan, combinan ni correlacionan por SMP.
+- Porcentajes se expresan sobre las filas EVALUABLES de cada sensor; cautela
+  al comparar sensores con distinto número de registros o muestreo.
+- Si una o más variables tienen MAD cero o pocos datos, la evaluación del
+  sensor será incompleta (cobertura_parcial=True).
+- Los gráficos submuestrean la línea y limitan marcadores para visualizar
+  muchos datos sin perder los conteos completos en los CSV.
+- Los resultados serán más fiables al separar regímenes de operación,
+  verificar las unidades y crear una referencia de funcionamiento saludable.

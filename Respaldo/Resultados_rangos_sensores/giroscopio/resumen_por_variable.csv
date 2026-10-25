@@ -1,0 +1,4 @@
+﻿sensor;variable;registros;evaluables;normal;alerta;critico_estadistico;porcentaje_alerta_evaluables;porcentaje_critico_evaluables;referencia
+giroscopio;GiroX_SisGenEol;143561;143561;143549;12;0;0,008;0,0;APTO_EXPLORATORIO
+giroscopio;GiroY_SisGenEol;143561;143561;143388;173;0;0,121;0,0;APTO_EXPLORATORIO
+giroscopio;GiroZ_SisGenEol;143561;143561;143502;53;6;0,037;0,004;APTO_EXPLORATORIO

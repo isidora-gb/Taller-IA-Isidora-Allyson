@@ -1,0 +1,2 @@
+﻿variable,n_validos,n_nulos,media,mediana,desviacion_estandar,varianza,minimo,q1_25pct,q3_75pct,maximo,rango,rango_intercuartil,cv_pct
+Ter_SisGenEol,143561,0,14.527632417578591,14.5,0.08282198864865853,0.006859481803718522,14.25,14.4375,14.5625,14.8125,0.5625,0.125,0.570099698753687

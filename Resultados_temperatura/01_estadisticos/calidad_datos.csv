@@ -1,0 +1,12 @@
+﻿indicador,valor
+n_registros,143561
+smp_original_invalidos,1
+smp_original_nulos,1
+smp_original_reinicios_probables_16bits,2
+smp_continuo_incrementos_mayores_a_uno,351
+smp_continuo_muestras_omitidas_estimadas,351
+smp_desde_cero_inicial,0
+smp_desde_cero_final,143911
+temperatura_nulos_o_no_numericos,0
+temperatura_atipicos_6sigma,0
+temperatura_atipicos_6sigma_con_smp_invalido,0

@@ -1,0 +1,25 @@
+﻿ANALISIS DE TEMPERATURA - METODO 6 SIGMA
+Entrada: C:\Users\isigb\OneDrive\Desktop\Taller ia 2\Datos_corregidos\04_temperatura_smp_ordenado.csv
+Salida: C:\Users\isigb\OneDrive\Desktop\Taller ia 2\Resultados_temperatura
+Total registros: 143561
+No numericos/vacios en temperatura: 0
+Media original: 14.52763242; desv. muestral: 0.08282199
+Limites 6σ: [14.03070049, 15.02456435]
+Atipicos detectados: 0 (0.0000%)
+Coinciden con SMP original invalido: 0
+SMP original invalidos: 1
+Reinicios 16 bits probables: 2
+Saltos de contador > 1: 351
+
+NOTAS METODOLOGICAS:
+- Valores fuera de 6σ no prueban por si solos una falla real.
+- El cruce con SMP original invalido debe investigarse antes de inferir anomalias termicas.
+- El CSV original no se modifica y no se eliminan filas.
+- En el CSV tratado, los valores atipicos se reemplazan por celdas vacias.
+- Los 3 SMP permanecen inalterados, incluido el original sospechoso.
+- El eje X representa muestras, NO tiempo real: falta frecuencia de muestreo.
+- Las unidades de Ter_SisGenEol no estan confirmadas en los metadatos.
+- El criterio de boxplot es IQR (no 6sigma).
+- La autocorrelacion lag1 describe pares de muestras consecutivas; no es correlacion entre sensores.
+- Los promedios moviles tienen una ventana de 1000 filas, no de segundos.
+- No se infieren ciclos ni periodicidad de mantenimiento a partir de SMP por si solo.

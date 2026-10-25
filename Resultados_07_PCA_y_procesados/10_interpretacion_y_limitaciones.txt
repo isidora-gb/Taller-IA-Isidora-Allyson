@@ -1,0 +1,25 @@
+ANALISIS DE DATOS PROCESADOS Y PCA
+
+Fuente de trabajo: C:\Users\isigb\OneDrive\Desktop\Taller ia 2\Datos_corregidos\datos_multisensor_corregidos.csv
+Modo de analisis: CSV corregido con tratamiento 6sigma en memoria
+Registros: 143561 | Variables fisicas: 10
+PC1: 14.581% | PC2: 13.192% | Acumulado PC1-PC2: 27.774%
+Componentes para >=90%: 9 | para >=95%: 10
+
+Interpretacion: los dos primeros componentes explican solo una fraccion limitada
+de la variabilidad total. El grafico PC1-PC2 sirve para exploracion, no para describir
+por completo el comportamiento del sistema. La figura 09 colorea cada punto segun el
+estado global derivado del mismo criterio robusto del codigo 05:
+NORMAL |Zm|<=3.5 ; ALERTA 3.5<|Zm|<=6 ; CRITICO_ESTADISTICO |Zm|>6.
+
+Variables con mayor carga absoluta en PC1:
+variable
+GiroZ_SisGenEol     0.596271
+GiroY_SisGenEol     0.524364
+Ter_SisGenEol       0.488024
+MagneX_SisGenEol    0.178624
+
+IMPORTANTE: el PCA no demuestra fallas ni reemplaza la interpretacion fisica.
+Se utilizaron 10 variables estandarizadas; los NaN del tratamiento 6sigma se imputaron
+por mediana solo para calcular el PCA. El estado de alerta se calculo sobre la base
+corregida sin eliminar esas observaciones.
