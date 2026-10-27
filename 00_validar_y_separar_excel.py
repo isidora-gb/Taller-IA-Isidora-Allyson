@@ -1,4 +1,26 @@
 # -*- coding: utf-8 -*-
+"""TALLER IA 2 | Recuperación verificable desde el Excel original.
+
+La planilla de origen contiene filas con fragmentos de medición concatenados
+antes del registro completo (11 campos) y una última fila truncada. Este
+programa conserva el bloque completo situado al FINAL de cada fila, siempre
+que termine en un SMP entero válido. EXCEPCIÓN explícita y auditada: conserva
+la última fila A:H del Excel e imputa SOLO MagneZ y Temperatura con el promedio
+de las dos mediciones anteriores y un SMP continuo inferido como el siguiente
+contador. El SMP original ausente queda VACÍO, nunca se presenta como medido.
+
+Separa los cuatro sensores, conserva el SMP verdadero y construye un CSV
+multisensor sincronizado. Crea una auditoría para rastrear filas corregidas.
+
+Uso:
+    python 00_validar_y_separar_excel.py
+    python 00_validar_y_separar_excel.py --entrada archivo.xlsx
+
+No requiere pandas, numpy ni openpyxl; usa solo Python estándar.
+No modifica el Excel original ni sobrescribe resultados previos (salvo que
+se ejecute nuevamente sobre la carpeta de salida propia).
+"""
+
 from __future__ import annotations
 import argparse
 import csv
@@ -301,6 +323,161 @@ Los resultados previos basados en filas desplazadas quedan invalidados.
     return dict(cifras)
 
 
+
+def validar_imputacion(salida: Path) -> None:
+    """Valida retrospectivamente las dos imputaciones finales, sin tocar los datos.
+
+    Se ocultan temporalmente mediciones conocidas y se estiman con las dos
+    observaciones anteriores. Una prueba equivalente evalua arrastre del ultimo
+    valor. Se usan posiciones deterministas para permitir reproducibilidad.
+    """
+    import statistics
+
+    entrada = salida / 'datos_multisensor_corregidos.csv'
+    objetivos = ['MagneZ_SisGenEol', 'Ter_SisGenEol']
+    nombres = ['MagneZ', 'Temperatura']
+    valores = {k: [] for k in objetivos}
+    filas = []
+    with entrada.open('r', encoding='utf-8-sig', newline='') as f:
+        reader = csv.DictReader(f, delimiter=';')
+        for fila in reader:
+            filas.append(int(fila['fila_excel']))
+            for nombre in objetivos:
+                dato = fila[nombre].strip().replace(',', '.')
+                valores[nombre].append(float(dato) if dato else math.nan)
+
+    directorio = salida / 'Validacion_imputacion'
+    directorio.mkdir(exist_ok=True)
+    resumen = []
+    ejemplos = []
+    contexto = []
+
+    for nombre, nombre_corto in zip(objetivos, nombres):
+        x = valores[nombre]
+        n = len(x)
+        if n < 20:
+            continue
+
+        # La ultima medicion es estimada: nunca entra como verdad de prueba.
+        posiciones = [
+            i for i in range(2, n - 1, 29)
+            if math.isfinite(x[i]) and math.isfinite(x[i - 1])
+            and math.isfinite(x[i - 2])
+        ]
+        verdaderos = [x[i] for i in posiciones]
+        pred_promedio = [(x[i - 1] + x[i - 2]) / 2 for i in posiciones]
+        pred_ultimo = [x[i - 1] for i in posiciones]
+        observado = [v for v in x[:-1] if math.isfinite(v)]
+
+        def calcular_mae_rmse(pred):
+            if not pred:
+                return math.nan, math.nan
+            errores = [p - y for p, y in zip(pred, verdaderos)]
+            return (sum(abs(e) for e in errores) / len(errores),
+                    math.sqrt(sum(e * e for e in errores) / len(errores)))
+
+        prom_mae, prom_rmse = calcular_mae_rmse(pred_promedio)
+        last_mae, last_rmse = calcular_mae_rmse(pred_ultimo)
+
+        media_sin = statistics.fmean(observado)
+        ds_sin = statistics.stdev(observado)
+        media_con = statistics.fmean(x)
+        ds_con = statistics.stdev(x)
+        ultimo_estimado = x[-1]
+        vecinos = x[-3:-1]
+        diferencia_vecinos = abs(vecinos[1] - vecinos[0])
+        z_final = ((ultimo_estimado - media_sin) / ds_sin
+                   if ds_sin else math.nan)
+
+        for metodo, mae, rmse in [
+            ('promedio_dos_anteriores', prom_mae, prom_rmse),
+            ('repetir_ultima_medicion', last_mae, last_rmse),
+        ]:
+            resumen.append({
+                'variable': nombre,
+                'metodo': metodo,
+                'n_posiciones_validacion': len(posiciones),
+                'MAE': mae,
+                'RMSE': rmse,
+                'valor_final_imputado': ultimo_estimado,
+                'valor_anterior_1': vecinos[1],
+                'valor_anterior_2': vecinos[0],
+                'diferencia_entre_vecinos': diferencia_vecinos,
+                'zscore_clasico_valor_final': z_final,
+                'media_sin_imputacion': media_sin,
+                'media_con_imputacion': media_con,
+                'diferencia_media': media_con - media_sin,
+                'DS_sin_imputacion': ds_sin,
+                'DS_con_imputacion': ds_con,
+                'diferencia_DS': ds_con - ds_sin,
+            })
+        contexto.append((nombre_corto, prom_mae, prom_rmse, last_mae, last_rmse,
+                         ultimo_estimado, vecinos, diferencia_vecinos, z_final,
+                         media_con - media_sin, ds_con - ds_sin, len(posiciones)))
+
+        for i, real, estimado, anterior in zip(
+                posiciones[:30], verdaderos[:30], pred_promedio[:30], pred_ultimo[:30]):
+            ejemplos.append({
+                'variable': nombre,
+                'fila_excel': filas[i],
+                'valor_observado_ocultado': real,
+                'estimacion_promedio_dos_anteriores': estimado,
+                'estimacion_ultimo_anterior': anterior,
+                'error_absoluto_promedio': abs(real - estimado),
+                'error_absoluto_ultimo': abs(real - anterior),
+            })
+
+    def escribir_csv(nombre_archivo, registros):
+        if not registros:
+            return
+        with (directorio / nombre_archivo).open(
+                'w', encoding='utf-8-sig', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=list(registros[0]), delimiter=';')
+            writer.writeheader()
+            for r in registros:
+                writer.writerow({
+                    k: format(v, '.12g').replace('.', ',') if isinstance(v, float)
+                    else v for k, v in r.items()
+                })
+
+    escribir_csv('01_metricas_validacion_imputacion.csv', resumen)
+    escribir_csv('02_ejemplos_observaciones_ocultadas.csv', ejemplos)
+    lineas = [
+        'VALIDACION DE IMPUTACION - REGISTRO FINAL',
+        '',
+        'Se validan los dos valores faltantes en la ultima fila mediante',
+        'enmascaramiento retrospectivo de observaciones conocidas.',
+        'Para cada posicion, el metodo solo usa las dos mediciones anteriores.',
+        'Muestreo de evaluacion: cada 29 observaciones desde la tercera.',
+        'La ultima fila imputada NO se utiliza como valor verdadero.',
+        'Se compara con el modelo ingenuo de repetir la ultima observacion.',
+        'El MAE y RMSE se expresan en la unidad original de cada variable;',
+        'para magnetometro Z la unidad instrumental no esta verificada.',
+        '',
+        'ADVERTENCIA: no es posible comprobar directamente el verdadero valor',
+        'faltante. Estas metricas validan el metodo en observaciones historicas,',
+        'no prueban que la ultima imputacion sea exactamente correcta.',
+        '',
+    ]
+    for (n, mae, rmse, mae2, rmse2, imp, vecinos,
+         diferencia, z, dm, dds, num) in contexto:
+        lineas += [
+            f'{n}:',
+            f'  Posiciones evaluadas: {num}',
+            f'  Promedio de dos anteriores: MAE={mae:.9g}; RMSE={rmse:.9g}',
+            f'  Repetir ultima observacion: MAE={mae2:.9g}; RMSE={rmse2:.9g}',
+            f'  Valor final imputado: {imp:.9g}',
+            f'  Dos valores previos: {vecinos[0]:.9g}; {vecinos[1]:.9g}',
+            f'  Diferencia absoluta entre vecinos: {diferencia:.9g}',
+            f'  Z-score clasico de la imputacion: {z:.6g}',
+            f'  Cambio de media: {dm:.9g}',
+            f'  Cambio de desviacion estandar: {dds:.9g}',
+            '',
+        ]
+    (directorio / '03_interpretacion_validacion.txt').write_text(
+        '\n'.join(lineas), encoding='utf-8')
+    print('Validacion de imputacion:', directorio.resolve())
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--entrada', type=Path, default=Path(__file__).resolve().parent / 'CF-2023-I-204-1230_DAT.xlsx')
@@ -309,6 +486,7 @@ def main():
     if not args.entrada.is_file():
         parser.error(f'Archivo no encontrado: {args.entrada}')
     procesar(args.entrada, args.salida)
+    validar_imputacion(args.salida)
 
 
 if __name__ == '__main__':

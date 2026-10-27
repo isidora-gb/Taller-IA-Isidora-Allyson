@@ -30,6 +30,7 @@ MIN_OBS = 10
 
 COLOR_BAR = "#245F83"
 COLOR_LINE = "#CB7940"
+COLOR_ARROW = "#355C7D"
 COLORES_ESTADO = {
     "NORMAL": "#2A9D55",
     "ALERTA": "#E09A2B",
@@ -97,6 +98,7 @@ def buscar_entrada(raiz: Path, entrada_usuario: str | None):
         raiz / "Datos_corregidos" / "datos_multisensor_corregidos.csv",
         raiz / "Datos_corregidos_desde_excel" / "datos_multisensor_corregidos.csv",
         raiz / "datos_multisensor_corregidos.csv",
+        Path("/mnt/data/Datos_corregidos_desde_excel/datos_multisensor_corregidos.csv"),
     ]
     tratado = next((p for p in candidatos_tratados if p.is_file()), None)
     corregido = next((p for p in candidatos_corregidos if p.is_file()), None)
@@ -221,6 +223,45 @@ def combinar_estados(df_base: pd.DataFrame) -> pd.DataFrame:
     out["estado_global"] = globales
     return out
 
+def graficar_cargas_flechas(cargas_pc12: np.ndarray, variables: list[str], ruta: Path) -> pd.DataFrame:
+    x = cargas_pc12[:, 0]
+    y = cargas_pc12[:, 1]
+    ang = np.degrees(np.arctan2(y, x))
+    mag = np.sqrt(x**2 + y**2)
+    tabla = pd.DataFrame({
+        "variable": variables,
+        "carga_PC1": x,
+        "carga_PC2": y,
+        "angulo_grados": ang,
+        "magnitud": mag,
+    })
+
+    fig, ax = plt.subplots(figsize=(9, 9))
+    theta = np.linspace(0, 2*np.pi, 400)
+    ax.plot(np.cos(theta), np.sin(theta), linestyle="--", color="#999999", linewidth=1)
+    ax.axhline(0, color="#777777", linewidth=1)
+    ax.axvline(0, color="#777777", linewidth=1)
+    for xi, yi, nombre, angulo in zip(x, y, variables, ang):
+        ax.arrow(0, 0, xi, yi, length_includes_head=True,
+                 head_width=0.035, head_length=0.05, linewidth=1.4,
+                 color=COLOR_ARROW, alpha=0.9)
+        ax.scatter([xi], [yi], s=25, color=COLOR_ARROW)
+        dx = 0.03 if xi >= 0 else -0.03
+        dy = 0.03 if yi >= 0 else -0.03
+        ha = "left" if xi >= 0 else "right"
+        va = "bottom" if yi >= 0 else "top"
+        ax.text(xi + dx, yi + dy, f"{nombre}\n{angulo:.1f}°", fontsize=8, ha=ha, va=va)
+    ax.set_xlim(-1.15, 1.15)
+    ax.set_ylim(-1.15, 1.15)
+    ax.set_aspect("equal", "box")
+    ax.set_xlabel("PC1")
+    ax.set_ylabel("PC2")
+    ax.set_title("PCA | Cargas con flechas y angulos (PC1-PC2)", weight="bold")
+    fig.tight_layout()
+    fig.savefig(ruta, bbox_inches="tight")
+    plt.close(fig)
+    return tabla
+
 def principal():
     parser = argparse.ArgumentParser(description="PCA y analisis de datos procesados")
     parser.add_argument("--carpeta", default=str(Path(__file__).resolve().parent))
@@ -250,7 +291,6 @@ def principal():
         fuente_texto = "CSV corregido con tratamiento 6sigma en memoria"
     guardar_csv(d_tratado, salida / "00_copia_tratada_utilizada_por_07.csv")
 
-    # Estadisticos y correlaciones tratadas
     estad = resumen_estadistico(d_tratado)
     guardar_csv(estad, salida / "01_estadisticos_datos_tratados.csv")
 
@@ -265,7 +305,6 @@ def principal():
     graficar_matriz(spearman, "Correlacion Spearman | Datos tratados 6sigma",
                     graficos / "02_matriz_spearman.png")
 
-    # Comparacion antes/despues si existe la base corregida sin tratar
     base_corregida = None
     if ruta_corregido and Path(ruta_corregido).is_file():
         base_corregida = leer_csv(Path(ruta_corregido))
@@ -294,16 +333,15 @@ def principal():
         fig.savefig(graficos / "04_DS_antes_despues.png", bbox_inches="tight")
         plt.close(fig)
 
-    # PCA
     X = d_tratado[VARIABLES].to_numpy(dtype=float)
-    imputer = SimpleImputer(strategy="median")
-    X_imp = imputer.fit_transform(X)
+    X_imp = SimpleImputer(strategy="median").fit_transform(X)
     X_std = StandardScaler().fit_transform(X_imp)
 
     pca = PCA(n_components=len(VARIABLES), svd_solver="full")
     scores = pca.fit_transform(X_std)
     var = pca.explained_variance_ratio_
     acum = np.cumsum(var)
+    autoval = pca.explained_variance_
 
     tabla_var = pd.DataFrame({
         "componente": [f"PC{i}" for i in range(1, len(VARIABLES) + 1)],
@@ -311,15 +349,19 @@ def principal():
         "porcentaje_varianza": var * 100,
         "varianza_acumulada": acum,
         "porcentaje_acumulado": acum * 100,
-        "autovalor": pca.explained_variance_,
+        "autovalor": autoval,
     })
     guardar_csv(tabla_var, salida / "06_varianza_explicada_PCA.csv")
 
-    cargas = pd.DataFrame(pca.components_.T, columns=[f"PC{i}" for i in range(1, len(VARIABLES) + 1)])
-    cargas.insert(0, "variable", VARIABLES)
-    guardar_csv(cargas, salida / "07_cargas_PCA.csv")
+    cargas_componentes = pd.DataFrame(pca.components_.T, columns=[f"PC{i}" for i in range(1, len(VARIABLES) + 1)])
+    cargas_componentes.insert(0, "variable", VARIABLES)
+    guardar_csv(cargas_componentes, salida / "07_cargas_PCA.csv")
 
-    # Estado global para colorear el PCA como en el codigo 05
+    # Loadings para grafico con flechas (correlation circle)
+    loadings = pca.components_.T * np.sqrt(pca.explained_variance_)
+    tabla_flechas = graficar_cargas_flechas(loadings[:, :2], VARIABLES, graficos / "07b_cargas_flechas_angulos_PC1_PC2.png")
+    guardar_csv(tabla_flechas, salida / "07b_cargas_flechas_angulos_PC1_PC2.csv")
+
     base_para_estado = base_corregida if base_corregida is not None else base
     estados = combinar_estados(base_para_estado)
     idx = None
@@ -341,7 +383,6 @@ def principal():
         tabla_scores[f"estado_sensor__{sensor}"] = estados[f"estado_sensor__{sensor}"]
     guardar_csv(tabla_scores, salida / "08_scores_PCA_con_estados.csv")
 
-    # Graficos PCA separados
     pcs = np.arange(1, len(VARIABLES) + 1)
 
     fig, ax = plt.subplots(figsize=(9.5, 5.5))
@@ -352,6 +393,17 @@ def principal():
     ax.set_title("PCA | Varianza explicada individual", weight="bold")
     fig.tight_layout()
     fig.savefig(graficos / "05_varianza_individual_PCA.png", bbox_inches="tight")
+    plt.close(fig)
+
+    # Grafico de codo solicitado
+    fig, ax = plt.subplots(figsize=(9.5, 5.5))
+    ax.plot(pcs, var * 100, marker="o", color=COLOR_LINE, linewidth=2)
+    ax.set_xticks(pcs)
+    ax.set_xlabel("Componente principal")
+    ax.set_ylabel("Varianza explicada (%)")
+    ax.set_title("PCA | Grafico de codo", weight="bold")
+    fig.tight_layout()
+    fig.savefig(graficos / "05b_grafico_de_codo_PCA.png", bbox_inches="tight")
     plt.close(fig)
 
     fig, ax = plt.subplots(figsize=(9.5, 5.5))
@@ -381,7 +433,6 @@ def principal():
     fig.savefig(graficos / "07_cargas_PCA.png", bbox_inches="tight")
     plt.close(fig)
 
-    # Proyeccion por orden de registro
     paso = max(1, len(tabla_scores) // 9000)
     ix = np.arange(0, len(tabla_scores), paso)
     fig, ax = plt.subplots(figsize=(9, 7))
@@ -396,7 +447,6 @@ def principal():
     fig.savefig(graficos / "08_proyeccion_PC1_PC2.png", bbox_inches="tight")
     plt.close(fig)
 
-    # Proyeccion por estado del codigo 05
     fig, ax = plt.subplots(figsize=(9.2, 7))
     sub = tabla_scores.iloc[ix].copy()
     orden_estados = ["NORMAL", "ALERTA", "CRITICO_ESTADISTICO", "SIN_REFERENCIA", "SIN_DATO"]
@@ -420,14 +470,13 @@ def principal():
     fig.savefig(graficos / "09_proyeccion_PC1_PC2_por_estado.png", bbox_inches="tight")
     plt.close(fig)
 
-    # Resumen e interpretacion
     cuenta_estados = tabla_scores["estado_global"].value_counts(dropna=False).rename_axis("estado").reset_index(name="registros")
     cuenta_estados["porcentaje"] = 100 * cuenta_estados["registros"] / len(tabla_scores)
     guardar_csv(cuenta_estados, salida / "09b_resumen_estados_globales.csv")
 
     n90 = int(np.searchsorted(acum, 0.90) + 1)
     n95 = int(np.searchsorted(acum, 0.95) + 1)
-    top_pc1 = cargas.set_index("variable")["PC1"].abs().sort_values(ascending=False).head(4)
+    top_pc1 = cargas_componentes.set_index("variable")["PC1"].abs().sort_values(ascending=False).head(4)
     texto = (
         "ANALISIS DE DATOS PROCESADOS Y PCA\n\n"
         f"Fuente de trabajo: {ruta_entrada}\n"
@@ -438,8 +487,9 @@ def principal():
         "Interpretacion: los dos primeros componentes explican solo una fraccion limitada\n"
         "de la variabilidad total. El grafico PC1-PC2 sirve para exploracion, no para describir\n"
         "por completo el comportamiento del sistema. La figura 09 colorea cada punto segun el\n"
-        "estado global derivado del mismo criterio robusto del codigo 05:\n"
-        "NORMAL |Zm|<=3.5 ; ALERTA 3.5<|Zm|<=6 ; CRITICO_ESTADISTICO |Zm|>6.\n\n"
+        "estado global derivado del mismo criterio robusto del codigo 05.\n"
+        "La figura 07b muestra las cargas PC1-PC2 como flechas desde el origen; el angulo\n"
+        "indica la orientacion de cada variable en el plano factorial.\n\n"
         "Variables con mayor carga absoluta en PC1:\n"
         + top_pc1.to_string() + "\n\n"
         "IMPORTANTE: el PCA no demuestra fallas ni reemplaza la interpretacion fisica.\n"

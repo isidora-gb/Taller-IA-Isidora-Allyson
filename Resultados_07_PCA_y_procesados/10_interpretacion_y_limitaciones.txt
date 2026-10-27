@@ -1,6 +1,6 @@
 ANALISIS DE DATOS PROCESADOS Y PCA
 
-Fuente de trabajo: C:\Users\isigb\OneDrive\Desktop\Taller ia 2\Datos_corregidos\datos_multisensor_corregidos.csv
+Fuente de trabajo: C:\Users\isigb\OneDrive\Desktop\Taller-IA-Isidora-Allyson\Datos_corregidos\datos_multisensor_corregidos.csv
 Modo de analisis: CSV corregido con tratamiento 6sigma en memoria
 Registros: 143561 | Variables fisicas: 10
 PC1: 14.581% | PC2: 13.192% | Acumulado PC1-PC2: 27.774%
@@ -9,8 +9,9 @@ Componentes para >=90%: 9 | para >=95%: 10
 Interpretacion: los dos primeros componentes explican solo una fraccion limitada
 de la variabilidad total. El grafico PC1-PC2 sirve para exploracion, no para describir
 por completo el comportamiento del sistema. La figura 09 colorea cada punto segun el
-estado global derivado del mismo criterio robusto del codigo 05:
-NORMAL |Zm|<=3.5 ; ALERTA 3.5<|Zm|<=6 ; CRITICO_ESTADISTICO |Zm|>6.
+estado global derivado del mismo criterio robusto del codigo 05.
+La figura 07b muestra las cargas PC1-PC2 como flechas desde el origen; el angulo
+indica la orientacion de cada variable en el plano factorial.
 
 Variables con mayor carga absoluta en PC1:
 variable

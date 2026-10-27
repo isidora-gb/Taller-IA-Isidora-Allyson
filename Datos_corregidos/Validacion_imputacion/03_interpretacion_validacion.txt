@@ -1,0 +1,36 @@
+VALIDACION DE IMPUTACION - REGISTRO FINAL
+
+Se validan los dos valores faltantes en la ultima fila mediante
+enmascaramiento retrospectivo de observaciones conocidas.
+Para cada posicion, el metodo solo usa las dos mediciones anteriores.
+Muestreo de evaluacion: cada 29 observaciones desde la tercera.
+La ultima fila imputada NO se utiliza como valor verdadero.
+Se compara con el modelo ingenuo de repetir la ultima observacion.
+El MAE y RMSE se expresan en la unidad original de cada variable;
+para magnetometro Z la unidad instrumental no esta verificada.
+
+ADVERTENCIA: no es posible comprobar directamente el verdadero valor
+faltante. Estas metricas validan el metodo en observaciones historicas,
+no prueban que la ultima imputacion sea exactamente correcta.
+
+MagneZ:
+  Posiciones evaluadas: 4951
+  Promedio de dos anteriores: MAE=0.000306986467; RMSE=0.0009097613
+  Repetir ultima observacion: MAE=0.00020313472; RMSE=0.00080940353
+  Valor final imputado: 1.0788
+  Dos valores previos: 1.0788; 1.0788
+  Diferencia absoluta entre vecinos: 0
+  Z-score clasico de la imputacion: 0.130596
+  Cambio de media: 1.94448524e-09
+  Cambio de desviacion estandar: -7.31774977e-09
+
+Temperatura:
+  Posiciones evaluadas: 4951
+  Promedio de dos anteriores: MAE=0.00340840234; RMSE=0.0160007708
+  Repetir ultima observacion: MAE=0.00233538679; RMSE=0.0145683274
+  Valor final imputado: 14.375
+  Dos valores previos: 14.375; 14.375
+  Diferencia absoluta entre vecinos: 0
+  Z-score clasico de la imputacion: -1.84293
+  Cambio de media: -1.063196e-06
+  Cambio de desviacion estandar: 6.91237282e-07
