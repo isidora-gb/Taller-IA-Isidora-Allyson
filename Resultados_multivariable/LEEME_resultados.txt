@@ -10,6 +10,7 @@
 07_graficos_multivariable\02_heatmap_spearman_10_variables.png
 07_graficos_multivariable\03_heatmap_pearson_despues_6sigma.png
 07_graficos_multivariable\04_evolucion_por_sensor_y_smp.png
+07_graficos_multivariable\04b_evolucion_por_sensor_SMP_continuo.png
 07_graficos_multivariable\05_dispersion_entre_sensores.png
 07_graficos_multivariable\06_porcentaje_anomalias.png
 07_graficos_multivariable\07_anomalias_por_bloques_smp.png
@@ -19,3 +20,4 @@
 10_auditoria_nulos_integridad.csv
 11_comparacion_tramos_inicial_final.csv
 12_texto_para_informe_punto1.md
+LEEME_resultados.txt

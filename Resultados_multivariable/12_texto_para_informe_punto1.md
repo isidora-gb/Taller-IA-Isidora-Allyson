@@ -8,7 +8,7 @@ Los estadísticos descriptivos por variable (media, desviación estándar, míni
 mediana, cuartiles y MAD) están en `01_estadisticos_10_variables.csv`.
 Los gráficos individuales de cada eje están en `Resultados_acelerometro`,
 `Resultados_giroscopio`, `Resultados_magnetometro` y `Resultados_temperatura`.
-Los gráficos 01–07 de esta carpeta complementan los análisis individuales.
+Los gráficos 01–07 y 04b de esta carpeta complementan los análisis individuales.
 
 **Validez física:** el CSV no trae fabricante, calibración, ubicación instrumental,
 unidades verificadas para todos los sensores, rangos admisibles ni estado operativo
@@ -59,6 +59,8 @@ Correlación no demuestra causalidad ni descarta relaciones no lineales o depend
 de condiciones operativas. La evolución por bloques y el porcentaje de alertas por
 SMP se presentan en los gráficos 04 y 07. Se incluyen dispersiones entre sensores
 (gráfico 05) y comparación del primer y último cuartil de registros (tabla 11).
+El gráfico 04b presenta la misma evolución que el 04 con SMP continuo,
+sin desplazar el contador a cero.
 
 **Advertencia metodológica:** el contador SMP permite ordenar observaciones, pero
 no equivale a segundos. Sin frecuencia de muestreo y su estabilidad comprobadas

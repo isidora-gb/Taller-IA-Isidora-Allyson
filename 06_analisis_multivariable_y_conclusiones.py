@@ -146,11 +146,14 @@ def heatmap(matrix,ruta,titulo):
     fig.tight_layout();fig.savefig(ruta,dpi=300,bbox_inches='tight');plt.close(fig)
 
 
-def grafico_evolucion(x,smp,ruta, hz=None):
+def grafico_evolucion(x,smp,ruta, hz=None, continuo=False):
     """Cuantiles por bloques, no se confunde número de muestra con segundos."""
     block=1000; n=len(smp)
     grupos=[np.arange(a,min(a+block,n)) for a in range(0,n,block)]
-    if hz is None:
+    if continuo:
+        xs=np.array([np.median(smp[g]) for g in grupos])
+        xlabel='SMP continuo (contador de adquisición; NO segundos)'
+    elif hz is None:
         xs=np.array([np.median(smp[g]-smp[0]) for g in grupos])
         xlabel='SMP desde cero (índice de muestra; NO segundos)'
     else:
@@ -331,6 +334,7 @@ def principal(entrada, salida,hz=None):
     heatmap(despues,graficos/'03_heatmap_pearson_despues_6sigma.png',
             'Correlaciones Pearson | valores >6σ vacíos solo en copia')
     grafico_evolucion(x,smp,graficos/'04_evolucion_por_sensor_y_smp.png',hz)
+    grafico_evolucion(x,smp,graficos/'04b_evolucion_por_sensor_SMP_continuo.png',continuo=True)
     grafico_dispersion(x,pairwise,graficos/'05_dispersion_entre_sensores.png')
     grafico_porcentajes(clases,n,graficos/'06_porcentaje_anomalias.png')
     grafico_anomalias_bloques(clases,smp,graficos/'07_anomalias_por_bloques_smp.png',hz)
@@ -351,7 +355,7 @@ Los estadísticos descriptivos por variable (media, desviación estándar, míni
 mediana, cuartiles y MAD) están en `01_estadisticos_10_variables.csv`.
 Los gráficos individuales de cada eje están en `Resultados_acelerometro`,
 `Resultados_giroscopio`, `Resultados_magnetometro` y `Resultados_temperatura`.
-Los gráficos 01–07 de esta carpeta complementan los análisis individuales.
+Los gráficos 01–07 y 04b de esta carpeta complementan los análisis individuales.
 
 **Validez física:** el CSV no trae fabricante, calibración, ubicación instrumental,
 unidades verificadas para todos los sensores, rangos admisibles ni estado operativo
@@ -404,6 +408,8 @@ Correlación no demuestra causalidad ni descarta relaciones no lineales o depend
 de condiciones operativas. La evolución por bloques y el porcentaje de alertas por
 SMP se presentan en los gráficos 04 y 07. Se incluyen dispersiones entre sensores
 (gráfico 05) y comparación del primer y último cuartil de registros (tabla 11).
+El gráfico 04b presenta la misma evolución que el 04 con SMP continuo,
+sin desplazar el contador a cero.
 
 **Advertencia metodológica:** el contador SMP permite ordenar observaciones, pero
 no equivale a segundos. Sin frecuencia de muestreo y su estabilidad comprobadas
