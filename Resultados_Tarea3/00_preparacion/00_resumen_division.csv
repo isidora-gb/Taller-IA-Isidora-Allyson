@@ -1,0 +1,4 @@
+﻿conjunto;registros;porcentaje;smp_inicial;smp_final;celdas_no_numericas_o_nulas
+entrenamiento;100492;69.9995;21357;122094;0
+validacion;21534;14.9999;122095;143681;0
+prueba;21535;15.0006;143682;165268;0

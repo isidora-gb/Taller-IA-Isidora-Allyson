@@ -1,0 +1,10 @@
+{
+  "algoritmo": "IsolationForest",
+  "n_estimators": 300,
+  "max_samples": "auto",
+  "random_state": 42,
+  "fraccion_alertas_referencia_entrenamiento": 0.01,
+  "umbral_puntuacion": 0.5397604335746123,
+  "convencion_puntuacion": "mayor => más anómalo (-score_samples)",
+  "advertencia": "Sin etiquetas verificadas: NO se calculó exactitud ni matriz de confusión"
+}
