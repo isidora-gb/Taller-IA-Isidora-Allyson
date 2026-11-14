@@ -1,0 +1,4 @@
+﻿conjunto;registros;K;grupos_presentes;alertas_distancia;porcentaje_alertas;alertas_por_1000_muestras;episodios;distancia_mediana;distancia_percentil_95
+entrenamiento;100492;2;2;1005;1.0001;10.001;875;2.905248127111822;4.130173078264215
+validacion;21534;2;2;551;2.5587;25.587;396;3.148628090715939;4.390327702860962
+prueba;21535;2;2;962;4.4671;44.671;627;3.378162837395884;4.62686529036092

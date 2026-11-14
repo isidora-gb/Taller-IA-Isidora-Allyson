@@ -1,0 +1,4 @@
+﻿modelo_A;modelo_B;alertas_A;alertas_B;coincidencias_ambos;registros_marcados_por_alguno;jaccard_pct;advertencia
+Isolation Forest;K-means;948;962;604;1306;46.248085758039814;Jaccard = coincidencia de alertas, no exactitud ni precision diagnostica
+Isolation Forest;DBSCAN;948;3168;867;3249;26.685133887349952;Jaccard = coincidencia de alertas, no exactitud ni precision diagnostica
+K-means;DBSCAN;962;3168;916;3214;28.50031113876789;Jaccard = coincidencia de alertas, no exactitud ni precision diagnostica

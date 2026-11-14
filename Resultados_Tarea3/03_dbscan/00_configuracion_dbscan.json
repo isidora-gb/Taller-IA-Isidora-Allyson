@@ -1,0 +1,22 @@
+{
+  "algoritmo": "DBSCAN",
+  "random_state": 42,
+  "ajuste": "muestra del bloque entrenamiento (sin validacion ni prueba)",
+  "muestra_entrenamiento_efectiva": 4000,
+  "min_samples": 20,
+  "eps": 2.309545858649428,
+  "fraccion_ruido_objetivo_exploratorio": 0.05,
+  "criterio_eps": "distancia a min_samples-ésimo vecino; seleccionar tasa de ruido de muestra proxima a objetivo orientativo",
+  "dbscan_muestra_clusters": 1,
+  "dbscan_muestra_ruido": 196,
+  "dbscan_muestra_nucleos": 2600,
+  "extension_fuera_muestra": "nucleo mas cercano <= eps; sin reentrenar; asignacion aproximada",
+  "advertencias": [
+    "La clase -1 significa ruido de densidad, no averia confirmada",
+    "DBSCAN sklearn no ofrece predict() nativo para registros nuevos",
+    "Clasificacion de todos los SMP es una extension aproximada de la muestra entrenada",
+    "SMP no representa segundos",
+    "No hay etiquetas reales para calcular matriz de confusion",
+    "Las tasas de ruido no son directamente equivalentes al 1% fijado en IF y K-means"
+  ]
+}

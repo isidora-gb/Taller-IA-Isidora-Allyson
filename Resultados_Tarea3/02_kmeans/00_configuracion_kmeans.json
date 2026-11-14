@@ -1,0 +1,22 @@
+{
+  "algoritmo": "KMeans",
+  "K_elegido": 2,
+  "K_evaluados": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "criterio": "mayor silhouette en muestra de validación",
+  "muestra_entrenamiento_para_K": 12000,
+  "muestra_validacion_para_K": 1500,
+  "ajuste_modelo_final": "solo entrenamiento completo",
+  "n_init": 10,
+  "random_state": 42,
+  "regla_alerta_adicional": "distancia al centroide >= percentil entrenamiento",
+  "fraccion_alerta_referencia": 0.01,
+  "umbral_distancia": 4.671868383659694,
+  "advertencia": "La distancia no es una probabilidad de falla; sin etiquetas no hay matriz de confusión"
+}
