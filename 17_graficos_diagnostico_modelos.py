@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-"""TAREA 3 - Visualizaciones complementarias de K-means, DBSCAN, Isolation Forest y SHAP.
+"""TAREA 3 - Gráficos completos de K-means, DBSCAN, Isolation Forest, SHAP y PCA.
 
 No reentrena algoritmos de deteccion ni reajusta umbrales. Unicamente
-ajusta PCA sobre entrenamiento para VISUALIZAR las etiquetas en 2D.
+ajusta PCA sobre entrenamiento para VISUALIZAR etiquetas en planos 2D.
 
 Requiere haber ejecutado los scripts 08, 09, 10, 11 y 12.
 Uso desde la carpeta principal del proyecto:
@@ -23,10 +23,12 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.colors import TwoSlopeNorm
+from matplotlib.patches import Circle
 import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA
-from sklearn.metrics import silhouette_score
+from sklearn.metrics import silhouette_score, silhouette_samples
+from sklearn.neighbors import NearestNeighbors
 
 SMP = 'smp_continuo'
 PARTES = ('entrenamiento', 'validacion', 'prueba')
@@ -37,6 +39,15 @@ MORADO = '#7953A9'
 VERDE = '#34947F'
 AMARILLO = '#DFA84A'
 GRIS = '#ACB7C3'
+PARES = [(0, 1), (2, 3), (0, 4)]
+NOMBRES = {
+    'AcelX1_SisGenEol': 'Ac X', 'AcelY1_SisGenEol': 'Ac Y',
+    'AcelZ1_SisGenEol': 'Ac Z', 'GiroX_SisGenEol': 'Gi X',
+    'GiroY_SisGenEol': 'Gi Y', 'GiroZ_SisGenEol': 'Gi Z',
+    'MagneX_SisGenEol': 'Ma X', 'MagneY_SisGenEol': 'Ma Y',
+    'MagneZ_SisGenEol': 'Ma Z', 'Ter_SisGenEol': 'Temp'
+}
+COLORS = [AZUL, ROJO, VERDE, MORADO, AMARILLO, '#4D535B']
 
 
 def leer(ruta: Path, columnas: list[str] | None = None) -> pd.DataFrame:
@@ -399,14 +410,16 @@ def main() -> None:
     todos = {parte: fusionar(preparados[parte], resultados, parte) for parte in PARTES}
 
     # PCA exclusivamente descriptivo/visual. Se ajusta SOLO con entrenamiento.
-    pca = PCA(n_components=2, svd_solver='full')
-    pca.fit(preparados['entrenamiento'][cols].to_numpy(dtype=float))
+    pca = PCA(n_components=10, svd_solver='full')
+    X_entreno = preparados['entrenamiento'][cols].to_numpy(dtype=float)
+    pca.fit(X_entreno)
     prueba = todos['prueba']
     ids = muestra_ids(prueba, args.max_puntos)
     visibles = prueba.iloc[ids].copy()
     xy = pca.transform(visibles[cols].to_numpy(dtype=float))
-    visibles['PC1'], visibles['PC2'] = xy[:, 0], xy[:, 1]
-    visibles[[SMP, 'PC1', 'PC2', 'cluster', 'cluster_dbscan_aproximado',
+    for i in range(5):
+        visibles[f'PC{i+1}'] = xy[:, i]
+    visibles[[SMP, 'PC1', 'PC2', 'PC3', 'PC4', 'PC5', 'cluster', 'cluster_dbscan_aproximado',
               'if_alerta', 'km_alerta', 'db_ruido', 'consenso']].to_csv(
                   salida / '00_muestra_visualizacion_prueba.csv', sep=';', index=False,
                   encoding='utf-8-sig')
@@ -421,16 +434,48 @@ def main() -> None:
     met_shap = graficos_shap(resultados, salida)
     grafico_comparacion(salida, visibles, todos)
 
+    # Complementos PCA y diagnósticos de agrupación: provienen del antiguo 18,
+    # pero se ejecutan aquí y utilizan el MISMO PCA, las MISMAS muestras y carpeta.
+    correlaciones = (pca.components_.T * np.sqrt(pca.explained_variance_)[None, :]
+                     / X_entreno.std(axis=0, ddof=1)[:, None])
+    nombres_variables = [NOMBRES.get(c[2:], c[2:]) for c in cols]
+    curva_varianza(pca, salida)
+    matriz_corr(correlaciones, pca, nombres_variables, salida)
+    for par in PARES:
+        circulo(pca, correlaciones, nombres_variables, par, salida)
+    grafico_pares(visibles, pca, xy, km, salida)
+    silueta_perfil = silueta_kmeans(preparados['validacion'], km, cols, salida)
+    eps_dbscan = distancia_k_dbscan(preparados['entrenamiento'], cols, db, salida)
+
+    pd.DataFrame({'variable': nombres_variables,
+                  **{f'corr_PC{i+1}': correlaciones[:, i] for i in range(10)}}).to_csv(
+        salida / '00_correlaciones_variables_PC1_PC10.csv',
+        sep=';', index=False, encoding='utf-8-sig')
+    pd.DataFrame({'componente': [f'PC{i+1}' for i in range(10)],
+                  'varianza_individual_pct': pca.explained_variance_ratio_ * 100,
+                  'varianza_acumulada_pct': np.cumsum(pca.explained_variance_ratio_) * 100}).to_csv(
+        salida / '00_varianza_pca_entrenamiento.csv',
+        sep=';', index=False, encoding='utf-8-sig')
+
     meta = {'pca_ajustado_solo_en_entrenamiento': True,
             'pca_varianza_explicada_pc1_pc2_pct':
-                round(float(pca.explained_variance_ratio_.sum() * 100), 4),
+                round(float(pca.explained_variance_ratio_[:2].sum() * 100), 4),
+            'pca_varianza_explicada_pc1_a_pc4_pct':
+                round(float(pca.explained_variance_ratio_[:4].sum() * 100), 4),
+            'pca_varianza_explicada_pc1_a_pc5_pct':
+                round(float(pca.explained_variance_ratio_[:5].sum() * 100), 4),
+            'silueta_kmeans_muestra_validacion': silueta_perfil,
+            'eps_dbscan': eps_dbscan,
             'muestras_prueba_total': len(prueba),
             'registros_usados_en_graficos_de_dispersion': len(visibles),
             'dispersion_muestra_estratificada_entre_alertas_y_no_alertas': True,
             'kmeans_k': int(km.n_clusters),
             'dbscan': met_db, 'shap': met_shap,
             'advertencias': [
-                'PCA 2D es una proyección; los algoritmos usaron 10 variables.',
+                'PC1-PC2, PC3-PC4 y PC1-PC5 son proyecciones descriptivas; modelos usan 10 variables.',
+                'PCA y correlaciones se ajustaron usando entrenamiento: pueden diferir del informe 2.',
+                'Flechas del círculo muestran correlaciones proyectadas, NO relaciones causales.',
+                'El perfil de silueta K-means se calcula en muestra de validación.',
                 'PCA 2D no necesariamente separa visualmente grupos existentes en 10D.',
                 'Silueta mide estructura de agrupación, no detección de fallas.',
                 'DBSCAN de prueba es una extensión aproximada de un ajuste en muestra.',
@@ -456,7 +501,176 @@ def main() -> None:
     print('Silueta DBSCAN:', met_db['silhouette_sin_ruido'] if
           met_db['silhouette_sin_ruido'] is not None else met_db['nota_silhouette'])
     print(f'PCA PC1+PC2 = {meta["pca_varianza_explicada_pc1_pc2_pct"]:.2f}% de varianza (visualización)')
+    print(f'PCA PC1-PC4 = {meta["pca_varianza_explicada_pc1_a_pc4_pct"]:.2f}% y PC1-PC5 acumulada = {meta["pca_varianza_explicada_pc1_a_pc5_pct"]:.2f}%')
+    print('30 gráficos generados (15 originales + 15 PCA/diagnóstico).')
     print('Nota: no se reentrenaron detectores, y no se conocen fallas verificadas.')
+
+
+def nombres_ejes(pca, i, j):
+    return (f'PC{i+1} ({pca.explained_variance_ratio_[i]*100:.2f} %)',
+            f'PC{j+1} ({pca.explained_variance_ratio_[j]*100:.2f} %)')
+
+
+def circulo(pca, correlaciones, variables, pair, out):
+    i,j = pair
+    fig,ax=plt.subplots(figsize=(8.2,8.2))
+    ax.add_patch(Circle((0,0),1,fill=False,edgecolor='#999999',lw=1.3))
+    ax.axhline(0,color='#888888',lw=.7)
+    ax.axvline(0,color='#888888',lw=.7)
+    palette=plt.get_cmap('tab10')
+    # Distribuye nombres con separación vertical para evitar superposiciones.
+    # Solo se mueven las ETIQUETAS, las flechas siempre conservan su extremo real.
+    puntos=[(k, *correlaciones[k,[i,j]]) for k in range(len(variables))]
+    posiciones={}
+    for lado in (-1,1):
+        grupo=sorted((k,x,y) for k,x,y in puntos if (1 if x>=0 else -1)==lado)
+        grupo=sorted(grupo,key=lambda elemento:elemento[2])
+        if not grupo:continue
+        ys=np.array([v[2] for v in grupo],float)
+        ys2=ys.copy()
+        # Evita nombres apilados cerca del origen, sin reordenar verticalmente.
+        for t in range(1,len(ys2)):
+            ys2[t]=max(ys2[t],ys2[t-1]+.095)
+        centro=float((ys2-ys).mean())
+        ys2-=centro
+        if ys2[0]<-1.13: ys2+=-1.13-ys2[0]
+        if ys2[-1]>1.13: ys2-=ys2[-1]-1.13
+        for (k,x,y),y_txt in zip(grupo,ys2):
+            posiciones[k]=(x+lado*.063,y_txt,lado)
+    for k,nombre in enumerate(variables):
+        x,y=correlaciones[k,[i,j]]
+        color=palette(k)
+        ax.annotate('',xy=(x,y),xytext=(0,0),
+                    arrowprops={'arrowstyle':'->','lw':1.6,'color':color})
+        tx,ty,lado=posiciones[k]
+        if abs(ty-y)>.045:
+            ax.plot([x,tx],[y,ty],color=color,lw=.65,alpha=.48,ls=':')
+        ax.text(tx,ty,nombre,fontsize=10,
+                ha='left' if lado==1 else 'right',va='center',color=color,
+                bbox={'facecolor':'white','edgecolor':'none','alpha':.72,'pad':.3})
+    ax.set_xlim(-1.23,1.23);ax.set_ylim(-1.23,1.23)
+    ax.set_aspect('equal',adjustable='box')
+    xx,yy=nombres_ejes(pca,i,j)
+    ax.set(xlabel=xx,ylabel=yy,title=f'Círculo de correlaciones | PC{i+1}–PC{j+1}')
+    ax.grid(alpha=.11)
+    guardar(fig,out/f'{ {(0,1):18, (2,3):19, (0,4):20}[(i,j)] }_circulo_PC{i+1}_PC{j+1}.png')
+
+
+def scatter(ax,tab,proyeccion,pca,pair,campo,title,centros=None):
+    i,j=pair
+    etiquetas=tab[campo].to_numpy()
+    valores=sorted(pd.unique(etiquetas))
+    for k,lbl in enumerate(valores):
+        select=etiquetas==lbl
+        color=('#B74956' if (campo=='db_ruido' and lbl==1)
+               else '#B74956' if (campo=='if_alerta' and lbl==1)
+               else COLORS[k % len(COLORS)])
+        if campo=='db_ruido': titulo='Ruido aproximado' if lbl==1 else 'Asignado a grupo'
+        elif campo=='if_alerta':titulo='Alerta' if lbl==1 else 'Sin alerta'
+        elif campo=='consenso':titulo=f'{lbl} modelo(s)'
+        else:titulo=f'Grupo {lbl}'
+        ax.scatter(proyeccion[select,i],proyeccion[select,j],s=7,
+                   alpha=.42,rasterized=True,linewidths=0,color=color,
+                   label=f'{titulo} (n={int(select.sum())})')
+    if centros is not None:
+        for k,centro in enumerate(centros):
+            ax.scatter(centro[i],centro[j],marker='X',s=180,
+                       edgecolors='#111111',linewidth=.8,
+                       color=COLORS[k % len(COLORS)],zorder=4)
+    xlabel,ylabel=nombres_ejes(pca,i,j)
+    ax.set(xlabel=xlabel,ylabel=ylabel,title=title)
+    ax.legend(loc='best',frameon=False,fontsize=8,markerscale=1.8)
+
+
+def grafico_pares(tab, pca, plot_xy, km, out):
+    coords_centros=pca.transform(km.cluster_centers_)
+    for i,j in [(2,3),(0,4)]:
+        for modelo,campo,centros,archivo in [
+          ('K-means | Grupos y centroides','cluster',coords_centros,'kmeans'),
+          ('DBSCAN | Grupo y ruido aproximados','db_ruido',None,'dbscan_aprox'),
+          ('Isolation Forest | Alertas','if_alerta',None,'isolation_forest'),
+          ('Consenso | Tres métodos','consenso',None,'consenso')]:
+            fig,ax=plt.subplots(figsize=(9.4,6.2))
+            scatter(ax,tab,plot_xy,pca,(i,j),campo,
+                    f'{modelo} | PC{i+1}–PC{j+1}',centros)
+            guardar(fig,out/f'{21 + (0 if (i,j)==(2,3) else 4) + {"kmeans":0, "dbscan_aprox":1, "isolation_forest":2, "consenso":3}[archivo]:02d}_{archivo}_PC{i+1}_PC{j+1}.png')
+
+
+def curva_varianza(pca,out):
+    var=pca.explained_variance_ratio_*100
+    cum=np.cumsum(var)
+    fig,ax=plt.subplots(figsize=(9.7,5.7))
+    x=np.arange(1,len(var)+1)
+    ax.bar(x,var,color='#357A9D',alpha=.79,label='Varianza individual')
+    ax.plot(x,cum,color='#A13D57',lw=2.2,marker='o',label='Varianza acumulada')
+    ax.axhline(90,ls='--',lw=1.3,color='#555555',label='Referencia 90 %')
+    ax.set(xticks=x,ylim=(0,105),xlabel='Componente principal',
+           ylabel='Varianza explicada (%)',title='PCA en entrenamiento | Varianza explicada')
+    ax.legend(frameon=False,loc='center right')
+    ax.grid(axis='y',alpha=.17)
+    guardar(fig,out/'16_pca_varianza_10_componentes.png')
+
+
+def matriz_corr(correlations,pca,vars,out):
+    valores=correlations[:,:5]
+    fig,ax=plt.subplots(figsize=(8.4,6.2))
+    im=ax.imshow(valores, vmin=-1,vmax=1,cmap='RdBu_r',aspect='auto')
+    ax.set_xticks(np.arange(5),[f'PC{k}' for k in range(1,6)])
+    ax.set_yticks(np.arange(len(vars)),vars)
+    for i in range(len(vars)):
+        for j in range(5):
+            v=valores[i,j]
+            ax.text(j,i,f'{v:+.2f}',ha='center',va='center',fontsize=8,
+                    color='white' if abs(v)>.55 else '#202020')
+    ax.set(title='Correlaciones de variables con PC1–PC5 | Entrenamiento')
+    fig.colorbar(im,ax=ax,shrink=.85,label='Correlación con el componente')
+    guardar(fig,out/'17_pca_mapa_calor_correlaciones_PC1_PC5.png')
+
+
+def silueta_kmeans(datos, modelo, columnas, out, tope=1200):
+    # Sólo descripción, K-means ya se encuentra entrenado.
+    n=min(len(datos),int(tope))
+    if n<5:return None
+    idx=np.random.default_rng(42).choice(len(datos),size=n,replace=False)
+    x=datos.iloc[idx][columnas].to_numpy(float)
+    etiquetas=modelo.predict(x)
+    if len(np.unique(etiquetas))<2: return None
+    vals=silhouette_samples(x,etiquetas)
+    fig,ax=plt.subplots(figsize=(9,6))
+    y=10
+    for k,lbl in enumerate(sorted(np.unique(etiquetas))):
+        s=np.sort(vals[etiquetas==lbl]); z=len(s)
+        ax.fill_betweenx(np.arange(y,y+z),0,s,color=COLORS[k],alpha=.77,
+                         label=f'Grupo {lbl}: n={z}')
+        y+=z+12
+    media=float(np.mean(vals));ax.axvline(media,color='#B74956',ls='--',lw=1.6,
+                                          label=f'Silueta media = {media:.3f}')
+    ax.set(xlabel='Coeficiente de silueta por observación',ylabel='Registros de validación (muestra)',
+           yticks=[],title='K-means | Perfil de silueta por grupo (validación)')
+    ax.legend(frameon=False)
+    guardar(fig,out/'29_kmeans_perfil_silueta_validacion.png')
+    return media
+
+
+def distancia_k_dbscan(entreno,cols,artefacto,out):
+    indice=np.asarray(artefacto['indice_muestra_entrenamiento'],int)
+    modelo=artefacto['modelo_dbscan_muestra']
+    vecinos=int(modelo.min_samples)
+    x=entreno.iloc[indice][cols].to_numpy(float)
+    if len(x)<vecinos:return None
+    # Incluye el propio punto, igual que min_samples de sklearn.DBSCAN.
+    nn=NearestNeighbors(n_neighbors=vecinos,n_jobs=-1).fit(x)
+    kdist=np.sort(nn.kneighbors(x,return_distance=True)[0][:,-1])
+    fig,ax=plt.subplots(figsize=(9.4,5.2))
+    ax.plot(np.arange(1,len(kdist)+1),kdist,lw=1.8,color='#207799')
+    ax.axhline(float(modelo.eps),ls='--',lw=1.6,color='#B74956',
+               label=f'eps utilizado = {float(modelo.eps):.3f}')
+    ax.set(xlabel='Observaciones ordenadas (muestra entrenamiento)',
+           ylabel=f'Distancia al vecino n.º {vecinos}',
+           title='DBSCAN | Curva de k-distancias (apoyo para revisar eps)')
+    ax.legend(frameon=False);ax.grid(axis='y',alpha=.14)
+    guardar(fig,out/'30_dbscan_curva_k_distancias.png')
+    return float(modelo.eps)
 
 
 if __name__ == '__main__':

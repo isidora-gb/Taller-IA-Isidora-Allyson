@@ -1,6 +1,10 @@
 {
   "pca_ajustado_solo_en_entrenamiento": true,
   "pca_varianza_explicada_pc1_pc2_pct": 26.8727,
+  "pca_varianza_explicada_pc1_a_pc4_pct": 48.3476,
+  "pca_varianza_explicada_pc1_a_pc5_pct": 58.6963,
+  "silueta_kmeans_muestra_validacion": 0.09193761222435276,
+  "eps_dbscan": 2.309545858649428,
   "muestras_prueba_total": 21535,
   "registros_usados_en_graficos_de_dispersion": 3500,
   "dispersion_muestra_estratificada_entre_alertas_y_no_alertas": true,
@@ -19,7 +23,10 @@
     "advertencia": "Interpretaciones locales seleccionadas, no importancia global ni causal."
   },
   "advertencias": [
-    "PCA 2D es una proyección; los algoritmos usaron 10 variables.",
+    "PC1-PC2, PC3-PC4 y PC1-PC5 son proyecciones descriptivas; modelos usan 10 variables.",
+    "PCA y correlaciones se ajustaron usando entrenamiento: pueden diferir del informe 2.",
+    "Flechas del círculo muestran correlaciones proyectadas, NO relaciones causales.",
+    "El perfil de silueta K-means se calcula en muestra de validación.",
     "PCA 2D no necesariamente separa visualmente grupos existentes en 10D.",
     "Silueta mide estructura de agrupación, no detección de fallas.",
     "DBSCAN de prueba es una extensión aproximada de un ajuste en muestra.",
