@@ -1,0 +1,2 @@
+﻿modo;registros;alertas_if;alertas_kmeans;ruido_dbscan_aproximado;consenso_2_o_3;coincidencia_los_3;episodios_if;episodios_consenso;registros_con_alguna_imputacion;alertas_if_explicadas_por_shap;error_maximo_reconstruccion_shap
+prueba;21535;948;962;3168;1225;581;764;842;0;20;4.440892098500626e-16

@@ -1,0 +1,2 @@
+﻿modo;archivo_entrada;registros;smp_min;smp_max;alertas_if;alertas_kmeans;ruido_dbscan_aproximado;consenso_2_o_3;consenso_los_3;episodios_if;episodios_kmeans;episodios_dbscan_aproximado;episodios_consenso;filas_con_nulos_nuevos_imputados;celdas_nuevas_imputadas;alertas_if_explicadas_shap;error_max_reconstruccion_shap
+demostracion_prueba_historica;C:\Users\isigb\OneDrive\Desktop\Taller-IA-Isidora-Allyson\Datos_corregidos\datos_multisensor_corregidos.csv;21535;143682;165268;948;962;3168;1225;581;764;627;1959;842;0;0;20;4.440892098500626e-16

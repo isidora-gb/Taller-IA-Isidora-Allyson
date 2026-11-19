@@ -1,0 +1,15 @@
+{
+  "modo": "demostracion_prueba_historica",
+  "entrenamiento_nuevo": false,
+  "recalibracion_umbrales": false,
+  "filtro_nuevos": "SMP continuo estrictamente posterior al ultimo historico",
+  "isolation_forest": "score_samples transformado a puntuacion positiva; umbral de entrenamiento",
+  "kmeans": "asignacion nativa a centroides + regla auxiliar de distancia",
+  "dbscan": "extension aproximada a nuevas filas, nucleo mas cercano dentro de eps; NO predict nativo",
+  "shap": "solo contribuciones al puntaje Isolation Forest de alertas seleccionadas, NO detector adicional",
+  "episodios": "filas alertadas consecutivas por SMP (NO tiempo fisico)",
+  "imputaciones": "solo nulos presentes en el CSV de entrada; NO cuenta reemplazos historicos de Tarea 2 ya incorporados",
+  "evaluacion": "demostracion retrospectiva de prueba ya examinada, NO validacion nueva",
+  "interpretacion": "alertas estadisticas para revision humana; NO fallas confirmadas ni orden de mantenimiento",
+  "seguridad": "solo cargar archivos joblib de origen confiable"
+}

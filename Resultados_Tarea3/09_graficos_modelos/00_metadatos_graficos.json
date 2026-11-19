@@ -1,0 +1,30 @@
+{
+  "pca_ajustado_solo_en_entrenamiento": true,
+  "pca_varianza_explicada_pc1_pc2_pct": 26.8727,
+  "muestras_prueba_total": 21535,
+  "registros_usados_en_graficos_de_dispersion": 3500,
+  "dispersion_muestra_estratificada_entre_alertas_y_no_alertas": true,
+  "kmeans_k": 2,
+  "dbscan": {
+    "n_muestra": 4000,
+    "clusters_nativos": 1,
+    "ruido_en_muestra": 196,
+    "silhouette_sin_ruido": null,
+    "nota_silhouette": "No definido: DBSCAN identificó 1 grupo(s) en la muestra sin contar el ruido; se necesitan al menos 2 grupos.",
+    "nota_extensión": "Prueba: asignación aproximada al núcleo más cercano; no es DBSCAN nativo."
+  },
+  "shap": {
+    "registros_shap": 40,
+    "alertas_en_muestra_shap": 20,
+    "advertencia": "Interpretaciones locales seleccionadas, no importancia global ni causal."
+  },
+  "advertencias": [
+    "PCA 2D es una proyección; los algoritmos usaron 10 variables.",
+    "PCA 2D no necesariamente separa visualmente grupos existentes en 10D.",
+    "Silueta mide estructura de agrupación, no detección de fallas.",
+    "DBSCAN de prueba es una extensión aproximada de un ajuste en muestra.",
+    "SHAP explica la puntuación de Isolation Forest y no establece causalidad.",
+    "La muestra de dispersión no representa prevalencias exactas.",
+    "Sin etiquetas de falla no se puede medir precisión diagnóstica."
+  ]
+}

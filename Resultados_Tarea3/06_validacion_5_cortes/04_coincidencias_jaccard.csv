@@ -1,0 +1,16 @@
+﻿corte;modelo_A;modelo_B;coincidencias_ambos;jaccard_pct
+1;Isolation Forest;K-means;148;49.169435
+1;Isolation Forest;DBSCAN (aprox.);197;16.737468
+1;K-means;DBSCAN (aprox.);236;20.016964
+2;Isolation Forest;K-means;136;34.605598
+2;Isolation Forest;DBSCAN (aprox.);243;24.570273
+2;K-means;DBSCAN (aprox.);241;24.794239
+3;Isolation Forest;K-means;198;40.325866
+3;Isolation Forest;DBSCAN (aprox.);275;21.137586
+3;K-means;DBSCAN (aprox.);377;29.361371
+4;Isolation Forest;K-means;367;45.646766
+4;Isolation Forest;DBSCAN (aprox.);614;29.704886
+4;K-means;DBSCAN (aprox.);485;23.926986
+5;Isolation Forest;K-means;174;47.933884
+5;Isolation Forest;DBSCAN (aprox.);250;21.777003
+5;K-means;DBSCAN (aprox.);257;22.743363

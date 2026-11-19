@@ -1,0 +1,11 @@
+{
+  "tipo": "prototipo retrospectivo por lotes; no sistema conectado en tiempo real",
+  "preprocesamiento": "imputador y escalador entrenados en el script 08",
+  "umbrales": "guardados por 09 y 10, no recalibrados en este programa",
+  "dbscan": "extension aproximada por nucleo mas cercano; no predict nativo",
+  "shap": "permutation SHAP de -score_samples, solo alertas IF seleccionadas; no participa en el consenso",
+  "episodios": "continuidad solo por SMP consecutivo; longitud en muestras, no segundos",
+  "prioridad": "regla exploratoria de apoyo a revision humana; no orden de mantenimiento",
+  "evaluacion": "conjunto de prueba ya examinado; esto no es una nueva validacion independiente",
+  "etiquetas": "no hay fallas confirmadas ni matriz de confusion real"
+}

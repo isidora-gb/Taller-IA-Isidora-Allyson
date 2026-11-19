@@ -1,0 +1,4 @@
+﻿modelo;media_porcentaje_alertas;desviacion_estandar_porcentaje;minimo_porcentaje;maximo_porcentaje
+Isolation Forest;2.0587533;1.106773;1.2180559;4.0004777
+K-means;1.9715787;0.66641884;1.4628612;2.991402
+DBSCAN (aprox.);7.8063052;2.4450721;5.720086;12.007404

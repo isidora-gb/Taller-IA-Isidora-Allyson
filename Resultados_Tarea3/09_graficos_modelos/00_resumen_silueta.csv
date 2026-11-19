@@ -1,0 +1,3 @@
+﻿modelo;n_grupos_entrenados;silhouette_muestra;nota
+K-means;2;;Curva K=2..7 y silueta de validación en 01_kmeans_coeficiente_silueta.png
+DBSCAN nativo muestra;1;;"No definido: DBSCAN identificó 1 grupo(s) en la muestra sin contar el ruido; se necesitan al menos 2 grupos."
