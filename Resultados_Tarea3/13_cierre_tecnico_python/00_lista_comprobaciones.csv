@@ -1,0 +1,28 @@
+﻿comprobacion;estado;detalle
+Cantidad registros;OK;143561
+SMP orden y unicidad;OK;"Saltos: 351; posiciones faltantes: 351"
+Tres particiones;OK;{'entrenamiento': 100492, 'validacion': 21534, 'prueba': 21535}
+Nulos físicos;OK;No hay nulos en las diez variables del CSV de análisis
+Fuente contra codigo 19;OK;Error máximo original/codigo19: 1.78e-15
+Perfiles K-means;OK;"Clusters: 2; tamaños: {0: np.int64(64762), 1: np.int64(78799)}"
+Coherencia Isolation Forest / entrenamiento;OK;"Coincidencias de bandera: 100492/100492; filas merge: 100492"
+Coherencia Isolation Forest / validacion;OK;"Coincidencias de bandera: 21534/21534; filas merge: 21534"
+Coherencia Isolation Forest / prueba;OK;"Coincidencias de bandera: 21535/21535; filas merge: 21535"
+Coherencia K-means / entrenamiento;OK;"Coincidencias de bandera: 100492/100492; filas merge: 100492"
+Coherencia K-means / validacion;OK;"Coincidencias de bandera: 21534/21534; filas merge: 21534"
+Coherencia K-means / prueba;OK;"Coincidencias de bandera: 21535/21535; filas merge: 21535"
+Coherencia DBSCAN aproximado / entrenamiento;OK;"Coincidencias de bandera: 100492/100492; filas merge: 100492"
+Coherencia DBSCAN aproximado / validacion;OK;"Coincidencias de bandera: 21534/21534; filas merge: 21534"
+Coherencia DBSCAN aproximado / prueba;OK;"Coincidencias de bandera: 21535/21535; filas merge: 21535"
+Sin filtración en preparación 08;OK;Diferencias absolutas máximas [imputación, media, escala]: [0.0, 0.0, 0.0]
+Episodios Isolation Forest;OK;Calculados=2181, guardados=2181, alertas=2533, suma longitudes=2533
+Episodios K-means;OK;Calculados=1898, guardados=1898, alertas=2518, suma longitudes=2518
+Episodios DBSCAN aproximado;OK;Calculados=7809, guardados=7809, alertas=10884, suma longitudes=10884
+Episodios Consenso 2+;OK;Calculados=2567, guardados=2567, alertas=3299, suma longitudes=3299
+Selección K por silueta;OK;K=2, silhouette validación=0.091209
+Cinco cortes;OK;Cortes presentes: [1, 2, 3, 4, 5]
+Corte 4, mayor desplazamiento;OK;Temp: -1.528 DS, Gi Z: +0.186 DS, Ma Y: -0.166 DS
+Procedencia imputaciones;OK;Se localizaron 1 registros de auditoría. Revisar contenido.
+Ultima fila corregida;OK;"Comparación con dos registros anteriores; no verifica dato real ni reemplaza evidencia de imputación"
+SHAP de puntuación (código 12);OK;"Importancias existentes; no comparar valores entre métodos SHAP"
+TreeSHAP de longitud (código 19);OK;"Importancias existentes; no comparar valores entre métodos SHAP"

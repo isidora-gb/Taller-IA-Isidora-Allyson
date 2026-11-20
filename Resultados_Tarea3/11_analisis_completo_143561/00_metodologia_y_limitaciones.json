@@ -1,0 +1,58 @@
+{
+  "fuente": "C:\\Users\\isigb\\OneDrive\\Desktop\\Taller-IA-Isidora-Allyson\\Datos_corregidos\\datos_multisensor_corregidos.csv",
+  "registros_analizados": 143561,
+  "smp_inicial": 21357,
+  "smp_final": 165268,
+  "grupos_kmeans": 2,
+  "grupos_dbscan_nativo_muestra": 1,
+  "muestra_dbscan": 4000,
+  "registros_ruido_dbscan_muestra_nativa": 196,
+  "umbral_if": 0.5397604335746123,
+  "umbral_kmeans": 4.671868383659694,
+  "eps_dbscan": 2.309545858649428,
+  "silhouette_kmeans_validacion_elegir_K": 0.0912086979295813,
+  "silhouette_kmeans_submuestra_todos": 0.08465067723589342,
+  "ajuste_final_todos": false,
+  "PCA_ajustado_solo_entrenamiento": true,
+  "PCA_componentes_1_2_varianza_pct": 26.8727202132922,
+  "PCA_componentes_1_5_varianza_pct": 58.696291986548886,
+  "shap": {
+    "modo_shap": "rapido_arboles_longitud",
+    "registros_shap": 120,
+    "alertas_shap": 60,
+    "normales_shap": 60,
+    "longitud_base": 12.036931785480647,
+    "normalizacion_score": 10.244770920119917,
+    "error_maximo_reconstruccion_score": 6.661338147750939e-16,
+    "advertencia": "Las contribuciones SHAP corresponden a longitud de aislamiento; no son SHAP de la puntuación -score_samples."
+  },
+  "anexo_validacion_5_cortes_original": true,
+  "clasificacion_robusta_estadistica": [
+    {
+      "estado_robusto_global": "normal",
+      "filas": 141550
+    },
+    {
+      "estado_robusto_global": "alerta",
+      "filas": 1986
+    },
+    {
+      "estado_robusto_global": "extremo",
+      "filas": 25
+    }
+  ],
+  "errores_maximos_validacion_escalado_fuente": 4.971876244042051e-10,
+  "metodologia": [
+    "Aplicación a las 143.561 filas; modelos entrenados con 70%, sin usar prueba para ajustarlos.",
+    "K-means forma grupos usando 10 variables escaladas; alertas por distancia a centroide con umbral fijo.",
+    "DBSCAN nativo fue ajustado en muestra; fuera de muestra etiqueta por núcleo más cercano y eps; es aproximación.",
+    "Coeficiente de silueta es muestral para evitar costos cuadráticos sobre 143 mil puntos.",
+    "TreeSHAP por defecto explica longitud de aislamiento; otro modo --shap-modo puntuacion reproduce la explicación del código 12.",
+    "SHAP es costoso y por defecto explica muestra; --shap-todos explica todos con alto costo.",
+    "PCA se ajusta con entrenamiento y proyecta todos; cada círculo muestra correlaciones en ese plano.",
+    "Episodios requieren SMP consecutivo; SMP no tiene unidad de segundos.",
+    "Las reglas Z modificado y 6sigma se computan sobre el histórico completo SOLO con fin descriptivo.",
+    "No existen etiquetas reales de falla: no calcular precisión, recall, F1 ni matriz de confusión.",
+    "La tasa de alertas en TODO incluye entrenamiento: no debe confundirse con evaluación externa del conjunto de prueba."
+  ]
+}

@@ -1,0 +1,9 @@
+﻿conjunto;cluster_kmeans;registros
+entrenamiento;0;45975
+entrenamiento;1;54517
+prueba;0;9213
+prueba;1;12322
+validacion;0;9574
+validacion;1;11960
+todos;0;64762
+todos;1;78799

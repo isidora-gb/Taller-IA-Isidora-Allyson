@@ -1,0 +1,13 @@
+﻿conjunto;modelo_A;modelo_B;coincidencias;jaccard_pct
+entrenamiento;IF;K-means;559;38.52515507
+entrenamiento;IF;DBSCAN;908;15.91307396
+entrenamiento;K-means;DBSCAN;967;17.12413671
+validacion;IF;K-means;354;45.55984556
+validacion;IF;DBSCAN;526;24.34058306
+validacion;K-means;DBSCAN;526;24.67166979
+prueba;IF;K-means;604;46.24808576
+prueba;IF;DBSCAN;867;26.68513389
+prueba;K-means;DBSCAN;916;28.50031114
+todos;IF;K-means;1517;42.92586304
+todos;IF;DBSCAN;2301;20.69989205
+todos;K-means;DBSCAN;2409;21.91394524

@@ -1,0 +1,11 @@
+﻿sensor;columna;media;desv_estandar;mediana;MAD;alertas_Z_modificado;extremos_Z_modificado;fuera_6sigma;nota
+Ac X;AcelX1_SisGenEol;0.00373061159;0.0005953525063;0.00378418;0.00036621;108;0;0;"Valores orientativos; no etiquetas de falla."
+Ac Y;AcelY1_SisGenEol;0.004866789055;0.0005633035473;0.00488281;0.00036621;18;0;0;"Valores orientativos; no etiquetas de falla."
+Ac Z;AcelZ1_SisGenEol;0.1265280745;0.0005156077842;0.126526;0.000366;7;0;0;"Valores orientativos; no etiquetas de falla."
+Gi X;GiroX_SisGenEol;3.077733777;0.1913158373;3.05793;0.14;12;0;0;"Valores orientativos; no etiquetas de falla."
+Gi Y;GiroY_SisGenEol;12.3168713;0.3304673043;12.3423;0.21;173;0;0;"Valores orientativos; no etiquetas de falla."
+Gi Z;GiroZ_SisGenEol;6.256854243;0.4189004499;6.272;0.28;53;6;6;"Valores orientativos; no etiquetas de falla."
+Ma X;MagneX_SisGenEol;0.7865324323;0.002102520427;0.78648;0.00116;467;9;0;"Valores orientativos; no etiquetas de falla."
+Ma Y;MagneY_SisGenEol;-0.6757704794;0.002044572448;-0.6757;0.00116;367;0;0;"Valores orientativos; no etiquetas de falla."
+Ma Z;MagneZ_SisGenEol;1.07852085;0.00213751733;1.07822;0.00116;788;10;0;"Valores orientativos; no etiquetas de falla."
+Temp;Ter_SisGenEol;14.52763242;0.08282198865;14.5;0.0625;0;0;0;"Valores orientativos; no etiquetas de falla."

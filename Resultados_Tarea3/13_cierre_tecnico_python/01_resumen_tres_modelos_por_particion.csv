@@ -1,0 +1,4 @@
+﻿conjunto;registros;alertas_if;alertas_kmeans;ruido_dbscan
+entrenamiento;100492;1005;1005;5609
+prueba;21535;948;962;3168
+validacion;21534;580;551;2107
