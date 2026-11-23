@@ -1,0 +1,16 @@
+﻿tipo;conjunto;episodios;muestras_alerta;longitud_maxima_muestras
+consenso_2_o_3;entrenamiento;1178;1346;10
+consenso_2_o_3;prueba;842;1225;28
+consenso_2_o_3;validacion;547;728;20
+consenso_3;entrenamiento;506;544;4
+consenso_3;prueba;463;581;10
+consenso_3;validacion;294;339;7
+dbscan_ruido_aproximado;entrenamiento;4381;5609;13
+dbscan_ruido_aproximado;prueba;1959;3168;31
+dbscan_ruido_aproximado;validacion;1469;2107;21
+isolation_forest;entrenamiento;922;1005;4
+isolation_forest;prueba;764;948;10
+isolation_forest;validacion;495;580;7
+kmeans_distancia;entrenamiento;875;1005;10
+kmeans_distancia;prueba;627;962;28
+kmeans_distancia;validacion;396;551;20

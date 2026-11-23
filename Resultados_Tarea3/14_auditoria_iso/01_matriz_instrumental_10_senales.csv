@@ -1,0 +1,11 @@
+﻿variable;sensor;eje;unidad_reportada;verificacion_de_unidades_declarada;verificacion_de_posicion_declarada;verificacion_de_calibracion_declarada;registros;nulos_csv_corregido;minimo_observado;maximo_observado;interpretacion
+AcelX1_SisGenEol;Acelerometro;X;m/s2 (reportada, no verificada);NO_VERIFICADO;NO_VERIFICADO;NO_VERIFICADO;143561;0;0.00115967;0.0057373;"Estadistica exploratoria; no son limites de operacion ISO"
+AcelY1_SisGenEol;Acelerometro;Y;m/s2 (reportada, no verificada);NO_VERIFICADO;NO_VERIFICADO;NO_VERIFICADO;143561;0;0.00274658;0.00714111;"Estadistica exploratoria; no son limites de operacion ISO"
+AcelZ1_SisGenEol;Acelerometro;Z;m/s2 (reportada, no verificada);NO_VERIFICADO;NO_VERIFICADO;NO_VERIFICADO;143561;0;0.124512;0.128723;"Estadistica exploratoria; no son limites de operacion ISO"
+GiroX_SisGenEol;Giroscopio;X;grados/s (reportada, no verificada);NO_VERIFICADO;NO_VERIFICADO;NO_VERIFICADO;143561;0;2.28793;3.89793;"Estadistica exploratoria; no son limites de operacion ISO"
+GiroY_SisGenEol;Giroscopio;Y;grados/s (reportada, no verificada);NO_VERIFICADO;NO_VERIFICADO;NO_VERIFICADO;143561;0;10.6623;13.8123;"Estadistica exploratoria; no son limites de operacion ISO"
+GiroZ_SisGenEol;Giroscopio;Z;grados/s (reportada, no verificada);NO_VERIFICADO;NO_VERIFICADO;NO_VERIFICADO;143561;0;-10.598;23.912;"Estadistica exploratoria; no son limites de operacion ISO"
+MagneX_SisGenEol;Magnetometro;X;unidad no verificada;NO_VERIFICADO;NO_VERIFICADO;NO_VERIFICADO;143561;0;0.77894;0.79692;"Estadistica exploratoria; no son limites de operacion ISO"
+MagneY_SisGenEol;Magnetometro;Y;unidad no verificada;NO_VERIFICADO;NO_VERIFICADO;NO_VERIFICADO;143561;0;-0.68382;-0.66816;"Estadistica exploratoria; no son limites de operacion ISO"
+MagneZ_SisGenEol;Magnetometro;Z;unidad no verificada;NO_VERIFICADO;NO_VERIFICADO;NO_VERIFICADO;143561;0;1.07068;1.08982;"Estadistica exploratoria; no son limites de operacion ISO"
+Ter_SisGenEol;Temperatura;unica;grados C (segun descripcion de base);NO_VERIFICADO;NO_VERIFICADO;NO_VERIFICADO;143561;0;14.25;14.8125;"Estadistica exploratoria; no son limites de operacion ISO"
