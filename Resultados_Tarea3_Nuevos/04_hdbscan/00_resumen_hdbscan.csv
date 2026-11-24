@@ -1,4 +1,4 @@
 ﻿conjunto;registros;grupos_presentes;ruido;ruido_pct;fuerza_media_sin_ruido;metodo_asignacion
-entrenamiento;100492;2;99552;99.06460216;0.9863027795;fit_hdbscan
-validacion;21534;2;21494;99.81424724;0.9958263396;approximate_predict
-prueba;21535;2;21507;99.8699791;0.9938856772;approximate_predict
+entrenamiento;100492;3;97654;97.1758946;0.9518709392;fit_hdbscan
+validacion;21534;3;21339;99.09445528;0.946819265;approximate_predict
+prueba;21535;2;21437;99.54492686;0.9494784246;approximate_predict

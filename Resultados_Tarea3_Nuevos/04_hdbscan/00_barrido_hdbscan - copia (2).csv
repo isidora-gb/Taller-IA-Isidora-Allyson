@@ -1,0 +1,4 @@
+﻿escalado;min_cluster_size;min_samples;cluster_selection_method;registros_entrenamiento;grupos;ruido_pct;ruido_n;persistencia_media_no_ponderada;tiempo_ajuste_segundos;estado;error;algoritmo_computo;trabajadores
+robusto;100;10;eom;100492;0;100;100492;;39.224;OK;;boruvka_kdtree;0
+robusto;200;5;eom;100492;0;100;100492;;42.654;OK;;boruvka_kdtree;0
+robusto;200;10;eom;100492;0;100;100492;;34.711;OK;;boruvka_kdtree;0

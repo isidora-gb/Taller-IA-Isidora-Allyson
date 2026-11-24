@@ -1,0 +1,6 @@
+﻿escalado;min_cluster_size;min_samples;cluster_selection_method;registros_entrenamiento;grupos;ruido_pct;ruido_n;persistencia_media_no_ponderada;tiempo_ajuste_segundos;estado;error;algoritmo_computo;trabajadores
+estandar;100;10;eom;100492;2;99.06460216;99552;0.02489396673;40.427;OK;;boruvka_kdtree;0
+estandar;200;5;eom;100492;3;97.1758946;97654;0.03326889143;50.632;OK;;boruvka_kdtree;0
+estandar;200;10;eom;100492;2;99.06460216;99552;0.01563532099;40.155;OK;;boruvka_kdtree;0
+estandar;200;20;eom;100492;0;100;100492;;35.272;OK;;boruvka_kdtree;0
+estandar;500;10;eom;100492;0;100;100492;;34.632;OK;;boruvka_kdtree;0

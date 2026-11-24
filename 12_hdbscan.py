@@ -1,8 +1,44 @@
+# -*- coding: utf-8 -*-
+"""12 | HDBSCAN multivariable: agrupamiento jerarquico por densidad.
 
+Lee las 10 señales JUNTAS de 08_preparacion_datos.py. Usa TODAS las filas:
+100.492 entrenamiento para ajustar HDBSCAN; 21.534 validacion y 21.535
+prueba para asignacion APROXIMADA fuera de muestra (sin reentrenamiento).
+La columna SMP identifica y ordena, pero no entra al algoritmo ni es tiempo.
+
+INSTALACION (en el mismo interprete con que se ejecuta este programa):
+    python -m pip install numpy pandas matplotlib scikit-learn hdbscan joblib
+
+USO (desde la carpeta de los codigos):
+    python 08_preparacion_datos.py
+    python -u 12_hdbscan.py                        # COMPROBAR sin entrenar
+    python -u 12_hdbscan.py --modo barrido --configs 200:10
+    python -u 12_hdbscan.py --modo barrido --configs 100:5,200:10,500:20
+    python -u 12_hdbscan.py --modo final --min-cluster-size 200 --min-samples 10
+
+El modo FINAL crea SIEMPRE gráficos de dispersion PCA
+completa y con zoom para entrenamiento, validacion y prueba, ademas de
+arbol condensado, persistencia, probabilidades, tamanos, evolucion SMP,
+perfil de grupos y atipicidad de entrenamiento. Los ejes PCA conservan
+las mismas escalas entre conjuntos. No se dibujan centroides ni X.
+El modo BARRIDO evalua varias configuraciones SOBRE TODO EL ENTRENAMIENTO;
+guarda la comparacion y sus graficos sin fingir que un parametro es optimo.
+El modo COMPROBAR es predeterminado para que el boton ▶ de VS Code no
+arranque un ajuste pesado sin argumentos. No entrena ningun algoritmo.
+Durante el ajuste se emiten avisos de actividad cada 15 segundos: NO son
+porcentajes de progreso de HDBSCAN, cuya libreria no los expone.
+No se divide por sensores ni se extraen muestras para entrenar.
+
+Los colores son etiquetas estadisticas; ruido (etiqueta -1) NO demuestra
+averia. Un puntaje de pertenencia NO es probabilidad de falla.
+"""
 from __future__ import annotations
 
 import argparse
 import json
+import os
+import sys
+import threading
 import time
 import warnings
 from pathlib import Path
@@ -17,14 +53,38 @@ import pandas as pd
 from sklearn.decomposition import PCA
 from sklearn.metrics import silhouette_score
 
-try:
-    import hdbscan
-    from hdbscan.prediction import approximate_predict
-except (ImportError, OSError) as exc:
-    raise SystemExit(
-        "No puedo importar la biblioteca 'hdbscan'. Instalala en el entorno ACTIVO de VS Code: "
-        "python -m pip install hdbscan\nDetalle: " + str(exc)
-    ) from exc
+# Importacion diferida: permite comprobar entradas y entorno SIN instalar hdbscan.
+# El algoritmo real, en barrido/final, requiere scikit-learn-contrib/hdbscan.
+def obtener_hdbscan():
+    try:
+        import hdbscan
+        from hdbscan.prediction import approximate_predict
+    except (ImportError, OSError) as exc:
+        raise RuntimeError(
+            "No se pudo importar hdbscan en este Python. "
+            "Instala con: python -m pip install hdbscan\n"
+            f"Python utilizado: {sys.executable}\nDetalle: {exc}"
+        ) from exc
+    return hdbscan, approximate_predict
+
+
+def estado_maquina():
+    try:
+        import psutil
+        vm = psutil.virtual_memory()
+        proc = psutil.Process(os.getpid())
+        return (f"RAM libre aprox. {vm.available/2**30:.1f} GiB; "
+                f"RAM proceso Python {proc.memory_info().rss/2**30:.2f} GiB")
+    except (ImportError, OSError, AttributeError):
+        return "RAM no disponible (opcional: python -m pip install psutil)"
+
+
+def avisos_mientras_calcula(evento: threading.Event, inicio: float):
+    """Aviso de VIDA cada 15 s; nunca inventa un porcentaje de ajuste."""
+    while not evento.wait(15):
+        minutos = (time.perf_counter() - inicio) / 60.0
+        print(f"  [AJUSTE EN CURSO] {minutos:.1f} min transcurridos; "
+              f"{estado_maquina()}. No se conoce % de progreso.", flush=True)
 
 RAIZ = Path(__file__).resolve().parent
 PARTES = ('entrenamiento', 'validacion', 'prueba')
@@ -80,18 +140,40 @@ def leer_08(preparados: Path, escalado: str):
     return datos, meta
 
 
-def entrenar(X, min_cluster_size: int, min_samples: int, metodo: str):
+def entrenar(X, min_cluster_size: int, min_samples: int, metodo: str,
+            trabajadores: int, algoritmo: str, prediccion: bool):
     if min_samples < 1 or min_cluster_size < 2:
         raise ValueError('min_samples >= 1 y min_cluster_size >= 2')
-    # hdbscan-contrib: min_samples no incluye al punto mismo; no confundir
-    # numericamente con la convencion del HDBSCAN de scikit-learn.
-    modelo = hdbscan.HDBSCAN(
+    if min_samples >= len(X) or min_cluster_size > len(X):
+        raise ValueError('Los parametros no deben superar el entrenamiento')
+    lib, _ = obtener_hdbscan()
+    if trabajadores <= 0:
+        trabajadores = max(1, min(4, (os.cpu_count() or 2) - 1))
+    # Con datos euclidianos de 10 dimensiones, el algoritmo Boruvka KDTree
+    # suele evitar la construccion de una matriz NxN de distancias.
+    # NO se garantiza tiempo de calculo: depende de hardware y datos.
+    print(f'  Motor={algoritmo}; trabajadores_distancias={trabajadores}; '
+          f'prediccion_fuera_muestra={prediccion}', flush=True)
+    print('  '+estado_maquina(), flush=True)
+    # hdbscan-contrib: min_samples NO cuenta el propio punto.
+    modelo = lib.HDBSCAN(
         min_cluster_size=min_cluster_size, min_samples=min_samples,
         metric='euclidean', cluster_selection_method=metodo,
-        prediction_data=True, approx_min_span_tree=True,
-        core_dist_n_jobs=1, algorithm='best',
+        prediction_data=prediccion, approx_min_span_tree=True,
+        core_dist_n_jobs=trabajadores, algorithm=algoritmo,
+        leaf_size=60,
     )
-    modelo.fit(X)  # TODAS las filas de entrenamiento; ninguna muestra omitida
+    inicio = time.perf_counter()
+    terminado = threading.Event()
+    hilo = threading.Thread(target=avisos_mientras_calcula,
+                            args=(terminado, inicio), daemon=True)
+    hilo.start()
+    try:
+        modelo.fit(np.ascontiguousarray(X, dtype=np.float64))
+    finally:
+        terminado.set()
+        hilo.join(timeout=1.0)
+    print(f'  Ajuste terminado en {(time.perf_counter()-inicio)/60:.1f} minutos.',flush=True)
     return modelo
 
 
@@ -112,6 +194,7 @@ def evaluar_partes(datos, modelo):
                 fuerza = np.zeros(len(X), dtype=float)
             else:
                 # Asignacion aproximada a clusters preexistentes, SIN reentrenar.
+                _, approximate_predict = obtener_hdbscan()
                 etiquetas, fuerza = approximate_predict(modelo, X)
                 etiquetas = np.asarray(etiquetas, dtype=np.int32)
                 fuerza = np.asarray(fuerza, dtype=float)
@@ -386,23 +469,25 @@ def resumen_modelo(modelo,X_train,ms,mcs,metodo,escalado,tiempo):
             'tiempo_ajuste_segundos':round(tiempo,3)}
 
 
-def barrido(datos, escalado, salida, configs, metodo):
+def barrido(datos, escalado, salida, configs, metodo, trabajadores, algoritmo):
     X=datos['entrenamiento'][1]
     resultados=[]
+    print(f'BARRIDO: {len(configs)} configuracion(es) sobre {len(X):,} registros, 10 senales juntas.',flush=True)
     for i,(mcs,ms) in enumerate(configs,1):
         print(f'[{i}/{len(configs)}] Las 10 senales | mcs={mcs} | ms={ms} | filas={len(X):,}',flush=True)
         t0=time.perf_counter()
         try:
-            modelo=entrenar(X,mcs,ms,metodo)
+            # El barrido no necesita generar estructuras costosas de prediccion.
+            modelo=entrenar(X,mcs,ms,metodo,trabajadores,algoritmo,False)
             fila=resumen_modelo(modelo,X,ms,mcs,metodo,escalado,time.perf_counter()-t0)
-            fila['estado']='OK'; fila['error']=''
+            fila['estado']='OK'; fila['error']=''; fila['algoritmo_computo']=algoritmo; fila['trabajadores']=trabajadores
         except (MemoryError, ValueError, RuntimeError) as exc:
             fila={'escalado':escalado,'min_cluster_size':mcs,'min_samples':ms,
                   'cluster_selection_method':metodo,'registros_entrenamiento':len(X),
                   'grupos':np.nan,'ruido_pct':np.nan,'ruido_n':np.nan,
                   'persistencia_media_no_ponderada':np.nan,
                   'tiempo_ajuste_segundos':round(time.perf_counter()-t0,3),
-                  'estado':'ERROR','error':str(exc)}
+                  'estado':'ERROR','error':str(exc),'algoritmo_computo':algoritmo,'trabajadores':trabajadores}
         resultados.append(fila)
         print('  ', fila['estado'], '| grupos:',fila.get('grupos'),'| ruido %:',fila.get('ruido_pct'),flush=True)
         exportar(pd.DataFrame(resultados),salida/'00_barrido_hdbscan.csv')
@@ -421,12 +506,13 @@ def barrido(datos, escalado, salida, configs, metodo):
     print('No se elige automaticamente una configuracion: revisar tabla y grafico.',flush=True)
 
 
-def final(datos,meta,escalado,salida,mcs,ms,metodo):
+def final(datos,meta,escalado,salida,mcs,ms,metodo,trabajadores,algoritmo):
     X=datos['entrenamiento'][1]
     print(f'Ajustando HDBSCAN sobre las 10 senales y TODO entrenamiento ({len(X):,})',flush=True)
     t=time.perf_counter()
-    modelo=entrenar(X,mcs,ms,metodo)
+    modelo=entrenar(X,mcs,ms,metodo,trabajadores,algoritmo,True)
     duracion=time.perf_counter()-t
+    print('[2/4] Asignacion de validacion y prueba completas (aproximada, sin reentrenar)',flush=True)
     tablas=evaluar_partes(datos,modelo)
     resumen,persistencia,grupos=calcular_resumen(tablas,modelo)
     for p in PARTES:
@@ -434,9 +520,11 @@ def final(datos,meta,escalado,salida,mcs,ms,metodo):
     exportar(resumen,salida/'00_resumen_hdbscan.csv')
     exportar(grupos,salida/'00_tamanos_grupos.csv')
     exportar(persistencia,salida/'00_persistencia_grupos.csv')
+    print('[3/4] Calculando resumen, persistencia y silueta descriptiva',flush=True)
     sil,n_silueta=silueta_solo_descriptiva(datos['validacion'][1],tablas['validacion'].cluster_hdbscan.to_numpy())
     configuracion={'metodo':'HDBSCAN contrib, 10 variables juntas','escalado':escalado,
                    'min_cluster_size':mcs,'min_samples':ms,'metrica':'euclidiana',
+                   'algoritmo_computo':algoritmo,'trabajadores_distancias':trabajadores,
                    'cluster_selection_method':metodo,'filas':{p:len(datos[p][0]) for p in PARTES},
                    'origen_sha256':meta.get('sha256_origen'), 'tiempo_ajuste_segundos':duracion,
                    'prediccion_fuera_muestra':'hdbscan.approximate_predict, NO reentrena jerarquia',
@@ -444,6 +532,7 @@ def final(datos,meta,escalado,salida,mcs,ms,metodo):
                    'n_muestra_silueta':n_silueta,
                    'advertencia':'Agrupaciones y ruido NO son fallas verificadas; sin etiquetas no hay precision diagnostica'}
     (salida/'00_configuracion_hdbscan.json').write_text(json.dumps(configuracion,indent=2,ensure_ascii=False),encoding='utf-8')
+    print('[4/4] Guardando modelo y generando los 13 graficos (puede tomar tiempo)',flush=True)
     joblib.dump(modelo,salida/'00_modelo_hdbscan.joblib')
     guardar_graficos(datos,tablas,modelo,persistencia,grupos,salida)
     print('\nHDBSCAN COMPLETADO',flush=True)
@@ -455,30 +544,56 @@ def final(datos,meta,escalado,salida,mcs,ms,metodo):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__,formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('--modo',choices=['barrido','final'],default='final')
+    parser.add_argument('--modo',choices=['comprobar','barrido','final'],default='comprobar',
+                        help='comprobar es predeterminado (seguro para boton Ejecutar de VS Code)')
     parser.add_argument('--escalado',choices=['estandar','robusto'],default='estandar')
     parser.add_argument('--min-cluster-size',type=int,default=200)
     parser.add_argument('--min-samples',type=int,default=10)
     parser.add_argument('--seleccion',choices=['eom','leaf'],default='eom')
     parser.add_argument('--configs',default='100:5,200:10,500:20',
                         help='Solo barrido: parejas min_cluster_size:min_samples separadas por coma')
+    parser.add_argument('--trabajadores',type=int,default=0,
+                        help='Trabajadores para distancias; 0 = automatico (maximo 4)')
+    parser.add_argument('--algoritmo',choices=['boruvka_kdtree','best'],default='boruvka_kdtree',
+                        help='Motor HDBSCAN para distancia euclidiana')
     parser.add_argument('--preparados',type=Path,default=None)
     parser.add_argument('--salida',type=Path,default=None)
     args=parser.parse_args()
     prep=args.preparados or RAIZ/'Resultados_Tarea3_Nuevos'/'00_preparacion'
     salida=args.salida or RAIZ/'Resultados_Tarea3_Nuevos'/'04_hdbscan'
+    if args.trabajadores < 0:
+        parser.error('--trabajadores debe ser 0 (auto) o un entero positivo')
+    print(f'Python: {sys.executable}',flush=True)
+    print(f'Leyendo 08 desde: {prep}',flush=True)
     datos,meta=leer_08(prep,args.escalado)
+    print('Datos verificados: '+', '.join(f'{p}={len(datos[p][0]):,}' for p in PARTES),flush=True)
+    print('10 variables simultaneas; SMP NO es predictor. '+estado_maquina(),flush=True)
+    if args.modo == 'comprobar':
+        try:
+            lib, _=obtener_hdbscan()
+            print(f'hdbscan instalado: {getattr(lib,"__version__","version no informada")}',flush=True)
+        except RuntimeError as exc:
+            print('AVISO:',exc,flush=True)
+        print('COMPROBACION TERMINADA (no entrena ni genera graficos).',flush=True)
+        print('Para barrido de UNA configuracion: python -u 12_hdbscan.py --modo barrido --configs 200:10',flush=True)
+        print('Para graficos finales: python -u 12_hdbscan.py --modo final --min-cluster-size 200 --min-samples 10',flush=True)
+        return
+    try:
+        obtener_hdbscan()
+    except RuntimeError as exc:
+        parser.error(str(exc))
     salida.mkdir(parents=True,exist_ok=True)
     if args.modo=='barrido':
         try:
             configs=[tuple(map(int,p.split(':'))) for p in args.configs.split(',')]
-            if not configs or any(len(c)!=2 or c[0]<2 or c[1]<1 for c in configs):
+            if not configs or any(len(c)!=2 or c[0]<2 or c[1]<1 or c[1]>=len(datos['entrenamiento'][0]) for c in configs):
                 raise ValueError()
         except ValueError:
             parser.error('--configs debe tener forma 100:5,200:10,500:20')
-        barrido(datos,args.escalado,salida,configs,args.seleccion)
+        barrido(datos,args.escalado,salida,configs,args.seleccion,args.trabajadores,args.algoritmo)
     else:
-        final(datos,meta,args.escalado,salida,args.min_cluster_size,args.min_samples,args.seleccion)
+        final(datos,meta,args.escalado,salida,args.min_cluster_size,args.min_samples,
+              args.seleccion,args.trabajadores,args.algoritmo)
 
 
 if __name__=='__main__':
