@@ -1,0 +1,3 @@
+﻿escenario;familia;escalado;patrones_distintos_train;mejor_k;silueta_barrido_k_elegido;silueta_final_validacion_muestra;varianza_pca_2d_pct;n_entrenamiento;n_validacion;n_prueba;n_muestra_silueta;inercia_final;Kmax_evaluado;regla;advertencia
+todas_estandar;todas;estandar;100492;2;0.09182441763;0.09182441763;26.87272021;100492;21534;21535;1800;917626.3198;40;criba por silueta muestral (barrido) y seleccion tras refinar finalistas en validación;silueta de agrupamiento NO es exactitud diagnóstica
+todas_robusto;todas;robusto;100492;2;0.09610659801;0.09615892796;28.28692367;100492;21534;21535;1800;525197.4624;40;criba por silueta muestral (barrido) y seleccion tras refinar finalistas en validación;silueta de agrupamiento NO es exactitud diagnóstica

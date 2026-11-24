@@ -1,0 +1,59 @@
+{
+  "fuente_08": "C:\\Users\\isigb\\OneDrive\\Desktop\\Taller-IA-Isidora-Allyson\\Resultados_Tarea3_Nuevos\\00_preparacion",
+  "registros": 143561,
+  "escenarios_recalculados": [
+    "todas_estandar"
+  ],
+  "escenarios_en_resumen": [
+    "todas_estandar",
+    "todas_robusto"
+  ],
+  "alcance": "10 variables juntas; sin modelos por sensor",
+  "variables": [
+    "AcelX1_SisGenEol",
+    "AcelY1_SisGenEol",
+    "AcelZ1_SisGenEol",
+    "GiroX_SisGenEol",
+    "GiroY_SisGenEol",
+    "GiroZ_SisGenEol",
+    "MagneX_SisGenEol",
+    "MagneY_SisGenEol",
+    "MagneZ_SisGenEol",
+    "Ter_SisGenEol"
+  ],
+  "particion": "cronológica 70/15/15",
+  "parametros": {
+    "max_k": 40,
+    "muestra_silueta": 1800,
+    "n_init_barrido": 1,
+    "max_iter_barrido": 100,
+    "n_init_final": 10,
+    "finalistas": 3,
+    "escalados": [
+      "estandar"
+    ],
+    "variables_combinadas": [
+      "AcelX1_SisGenEol",
+      "AcelY1_SisGenEol",
+      "AcelZ1_SisGenEol",
+      "GiroX_SisGenEol",
+      "GiroY_SisGenEol",
+      "GiroZ_SisGenEol",
+      "MagneX_SisGenEol",
+      "MagneY_SisGenEol",
+      "MagneZ_SisGenEol",
+      "Ter_SisGenEol"
+    ]
+  },
+  "explicaciones": [
+    "El entrenamiento utiliza TODAS las 100.492 filas para cada K.",
+    "La selección usa una muestra fija de validación para la métrica silueta por coste O(n²).",
+    "Las asignaciones y diagramas PCA muestran todas las filas de cada conjunto.",
+    "Las curvas son de exploración (K-Means con menos inicializaciones); los 3 K finalistas se reentrenan y reevalúan en validación.",
+    "Error de agrupamiento (%)=100*inercia(K)/inercia(K=1), NO porcentaje de clasificaciones incorrectas.",
+    "No se entrenan modelos independientes por sensor ni por familia: se usan simultáneamente las 10 señales.",
+    "El PCA no se empleó para entrenar K-Means; solo representa 2D.",
+    "El porcentaje de error es una transformación de la inercia, no un error de clasificación.",
+    "Los resultados son agrupaciones exploratorias, no diagnósticos de fallas."
+  ]
+}

@@ -1,4 +1,0 @@
-﻿conjunto;registros;eps;min_samples;clusters_presentes;registros_ruido;porcentaje_ruido;ruido_por_1000_muestras;episodios_ruido;distancia_nucleo_mediana;distancia_nucleo_p95;metodo_fuera_muestra
-entrenamiento;100492;2.309545858649428;20;1;5609;5.5815;55.815;4381;1.5239692993509766;2.3425255153032967;nucleo mas cercano en radio eps (aproximado)
-validacion;21534;2.309545858649428;20;1;2107;9.7845;97.845;1469;1.6447313823132665;2.539771012833735;nucleo mas cercano en radio eps (aproximado)
-prueba;21535;2.309545858649428;20;1;3168;14.7109;147.109;1959;1.746175948444373;2.6924096718378125;nucleo mas cercano en radio eps (aproximado)

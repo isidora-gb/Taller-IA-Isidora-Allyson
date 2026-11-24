@@ -1,0 +1,71 @@
+{
+  "registros": 143561,
+  "numero_variables_sensores": 10,
+  "smp_inicial": 21357,
+  "smp_final": 165268,
+  "saltos_smp": 351,
+  "posiciones_smp_ausentes": 351,
+  "filas_con_smp_estimado": 1,
+  "filas_con_medicion_imputada_en_origen": 1,
+  "nulos_senales": 0,
+  "origen": "C:\\Users\\isigb\\OneDrive\\Desktop\\Taller-IA-Isidora-Allyson\\Datos_corregidos\\datos_multisensor_corregidos.csv",
+  "sha256_origen": "23c89bcd909fbfc2f35b27fa52be53a95a12f2e5037dd24afd823b5e7b8fb94d",
+  "regla_division": "70/15/15 en orden de SMP, sin mezclas",
+  "conjuntos": [
+    {
+      "conjunto": "entrenamiento",
+      "registros": 100492,
+      "porcentaje": 69.9995124023934,
+      "smp_inicial": 21357,
+      "smp_final": 122094,
+      "celdas_senales_ausentes": 0,
+      "filas_preimputadas_origen": 0
+    },
+    {
+      "conjunto": "validacion",
+      "registros": 21534,
+      "porcentaje": 14.999895514798588,
+      "smp_inicial": 122095,
+      "smp_final": 143681,
+      "celdas_senales_ausentes": 0,
+      "filas_preimputadas_origen": 0
+    },
+    {
+      "conjunto": "prueba",
+      "registros": 21535,
+      "porcentaje": 15.000592082808005,
+      "smp_inicial": 143682,
+      "smp_final": 165268,
+      "celdas_senales_ausentes": 0,
+      "filas_preimputadas_origen": 1
+    }
+  ],
+  "variables": [
+    "AcelX1_SisGenEol",
+    "AcelY1_SisGenEol",
+    "AcelZ1_SisGenEol",
+    "GiroX_SisGenEol",
+    "GiroY_SisGenEol",
+    "GiroZ_SisGenEol",
+    "MagneX_SisGenEol",
+    "MagneY_SisGenEol",
+    "MagneZ_SisGenEol",
+    "Ter_SisGenEol"
+  ],
+  "columnas_no_predictoras": [
+    "smp_original",
+    "smp_continuo",
+    "smp_desde_cero",
+    "fila_excel",
+    "smp_estimado",
+    "medicion_imputada"
+  ],
+  "imputacion": "mediana calculada solo en entrenamiento",
+  "escalado": [
+    "StandardScaler",
+    "RobustScaler (IQR 25-75)"
+  ],
+  "tratamiento_outliers": "No se eliminan ni se sustituyen valores extremos",
+  "alcance": "Preparacion para analisis no supervisado; no diagnostica fallas",
+  "precaucion": "SMP ordena adquisiciones; sin frecuencia verificada no expresa tiempo"
+}

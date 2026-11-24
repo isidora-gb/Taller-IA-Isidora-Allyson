@@ -1,2 +1,0 @@
-﻿registros_comparados;alertas_isolation_forest;alertas_kmeans;alertas_dbscan;alertas_los_tres;alertas_al_menos_dos;alertas_al_menos_uno;ninguna_alerta;nota
-21535;948;962;3168;581;1225;3272;18263;Coincidencias entre detectores, NO matriz de confusion ni exactitud diagnóstica

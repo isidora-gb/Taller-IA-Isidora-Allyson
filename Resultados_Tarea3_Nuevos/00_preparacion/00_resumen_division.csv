@@ -1,0 +1,4 @@
+﻿conjunto;registros;porcentaje;smp_inicial;smp_final;celdas_senales_ausentes;filas_preimputadas_origen
+entrenamiento;100492;69.9995124023934;21357;122094;0;0
+validacion;21534;14.9998955147986;122095;143681;0;0
+prueba;21535;15.000592082808;143682;165268;0;1
