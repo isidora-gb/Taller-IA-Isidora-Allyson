@@ -1,0 +1,10 @@
+﻿conjunto;cluster_hdbscan;registros;porcentaje
+entrenamiento;-1;99552;99.06460216
+entrenamiento;0;705;0.701548382
+entrenamiento;1;235;0.2338494607
+validacion;-1;21494;99.81424724
+validacion;0;13;0.060369648
+validacion;1;27;0.1253831151
+prueba;-1;21507;99.8699791
+prueba;0;9;0.04179243093
+prueba;1;19;0.08822846529

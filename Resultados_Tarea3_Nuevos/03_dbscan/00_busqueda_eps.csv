@@ -1,0 +1,4 @@
+﻿metrica;min_samples;cuantil_distancia_k;eps;n_entrenamiento;ajuste_sobre_total;estado;observacion;clusters;ruido_registros;ruido_pct;nucleos;mayor_grupo_pct;grupo_mas_pequeno;frontera_registros
+euclidiana;20;0.1;1.239704875;100492;True;OK;;1;67279;66.94960793;10050;33.05039207;33213;23163
+euclidiana;20;0.25;1.358352875;100492;True;OK;;1;41773;41.56848306;25123;58.43151694;58719;33596
+euclidiana;20;0.35;1.423777387;100492;True;OK;;1;30259;30.1108546;35172;69.8891454;70233;35061

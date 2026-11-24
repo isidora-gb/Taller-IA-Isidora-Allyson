@@ -1,0 +1,2 @@
+El arbol condensado no pudo representarse; no se invento figura.
+ValueError: setting an array element with a sequence.

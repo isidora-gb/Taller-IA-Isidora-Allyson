@@ -1,0 +1,6 @@
+BARRIDO SOBRE TODO EL ENTRENAMIENTO (100 % de sus filas).
+Un grupo, muchos grupos o mucho ruido no son fallas de codigo: evaluar utilidad y estabilidad.
+No existe un eps optimo sin un criterio del problema.
+No se ha elegido aun una configuracion definitiva.
+Validacion y prueba quedan reservadas para la configuracion que se elija.
+OMITIDO_POR_COSTO significa que NO se calculo esa configuracion.

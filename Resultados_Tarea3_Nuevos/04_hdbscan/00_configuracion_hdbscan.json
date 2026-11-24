@@ -1,0 +1,19 @@
+{
+  "metodo": "HDBSCAN contrib, 10 variables juntas",
+  "escalado": "estandar",
+  "min_cluster_size": 200,
+  "min_samples": 10,
+  "metrica": "euclidiana",
+  "cluster_selection_method": "eom",
+  "filas": {
+    "entrenamiento": 100492,
+    "validacion": 21534,
+    "prueba": 21535
+  },
+  "origen_sha256": "23c89bcd909fbfc2f35b27fa52be53a95a12f2e5037dd24afd823b5e7b8fb94d",
+  "tiempo_ajuste_segundos": 120.2002547000302,
+  "prediccion_fuera_muestra": "hdbscan.approximate_predict, NO reentrena jerarquia",
+  "silueta_validacion_no_ruido_muestra": 0.14371477092621937,
+  "n_muestra_silueta": 40,
+  "advertencia": "Agrupaciones y ruido NO son fallas verificadas; sin etiquetas no hay precision diagnostica"
+}
