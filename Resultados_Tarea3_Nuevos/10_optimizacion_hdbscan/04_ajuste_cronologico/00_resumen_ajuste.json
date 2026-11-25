@@ -1,0 +1,23 @@
+{
+  "id": "estandar_mcs30_ms2_eom",
+  "escalado": "estandar",
+  "parametros": {
+    "id": "estandar_mcs30_ms2_eom",
+    "escalado": "estandar",
+    "min_cluster_size": 30,
+    "min_samples": 2,
+    "seleccion": "eom"
+  },
+  "filas_ajuste": 100492,
+  "tiempo_segundos": 96.23,
+  "grupos": 2,
+  "ruido_pct": 66.56649285515265,
+  "persistencia_grupos": [
+    0.009258239722941155,
+    0.05533713419637399
+  ],
+  "datos": "solo 100492 entrenamiento",
+  "advertencia": "ruido no equivale a falla; proyeccion 2D PCA es solo descriptiva",
+  "validacion_ruido_pct_aproximado": 85.51128448035664,
+  "prueba_ruido_pct_aproximado": 90.65706988623171
+}

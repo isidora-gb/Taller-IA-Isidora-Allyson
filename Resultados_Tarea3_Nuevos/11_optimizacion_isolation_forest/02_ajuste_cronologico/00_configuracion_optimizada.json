@@ -1,0 +1,20 @@
+{
+  "configuracion": {
+    "id": "estandar_a500_m2048",
+    "escalado": "estandar",
+    "n_estimators": 500,
+    "max_samples": 2048
+  },
+  "modo": "cronologico",
+  "n_ajuste": 100492,
+  "escalado_fijado_por_08": "estandar",
+  "umbral_auto": 0.5,
+  "umbrales_cuantiles_entrenamiento_08": {
+    "0.01": 0.5166765564654627,
+    "0.02": 0.5043142641362747,
+    "0.05": 0.48501047654684404
+  },
+  "n_senales": 10,
+  "seleccion_sin_etiquetas": true,
+  "nota": "En modo total son resultados dentro de muestra, NO test independiente"
+}

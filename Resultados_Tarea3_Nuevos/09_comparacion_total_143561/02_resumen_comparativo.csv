@@ -1,0 +1,5 @@
+﻿algoritmo;registros;grupos;asignados_a_grupos;n_ruido_o_alerta;pct_ruido_o_alerta;criterio
+K-Means;143561;2;143561;;;K-Means solo crea grupos
+DBSCAN;143561;1;111736;31825;22.1682768997;Ruido por densidad
+HDBSCAN;143561;2;450;143111;99.6865443958;Ruido por densidad
+Isolation Forest;143561;;;11783;8.20766085497;Alerta IF (umbral automatico)

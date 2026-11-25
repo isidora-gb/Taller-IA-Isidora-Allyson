@@ -1,0 +1,9 @@
+﻿combinacion;codigo;n_registros;pct_total
+HDBSCAN: ruido;2;110879;77.2347643162
+DBSCAN: ruido + HDBSCAN: ruido;3;20449;14.2441192246
+DBSCAN: ruido + HDBSCAN: ruido + IF: alerta;7;11376;7.92415767513
+Ninguno;0;450;0.313455604238
+HDBSCAN: ruido + IF: alerta;6;407;0.283503179833
+DBSCAN: ruido;1;0;0
+DBSCAN: ruido + IF: alerta;5;0;0
+IF: alerta;4;0;0

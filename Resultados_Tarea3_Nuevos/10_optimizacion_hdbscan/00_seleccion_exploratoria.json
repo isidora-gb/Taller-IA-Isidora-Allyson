@@ -1,0 +1,24 @@
+{
+  "estado": "candidato_seleccionado_bajo_criterios_orientativos",
+  "id_candidato_exploratorio": "estandar_mcs30_ms2_eom",
+  "cumple_puertas_orientativas": true,
+  "numero_configuraciones_probadas": 36,
+  "numero_configuraciones_propuestas": 36,
+  "barrido_completo": true,
+  "configuraciones_pendientes": [],
+  "umbrales_orientativos_no_normativos": {
+    "cobertura_train_y_validacion_pct": 10.0,
+    "persistencia_ponderada": 0.05,
+    "dbcv_aprox_mst_si_disponible": 0.0
+  },
+  "score_exploratorio_pesos": {
+    "cobertura_pct": 0.198,
+    "persistencia_ponderada": 0.198,
+    "val_cobertura_pct": 0.162,
+    "fidelidad_cobertura": 0.117,
+    "dbcv_aprox_mst": 0.225,
+    "jaccard_mediana_vecinos": 0.1
+  },
+  "dbcv_aprox_mst_completo": true,
+  "nota": "No es un optimo global, ni clasificacion de averias. La prueba no participo en la seleccion."
+}

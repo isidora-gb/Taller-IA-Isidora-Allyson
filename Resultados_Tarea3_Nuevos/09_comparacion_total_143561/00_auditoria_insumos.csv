@@ -1,0 +1,5 @@
+﻿algoritmo;archivo;filas;smp_min;smp_max;smp_unicos;columnas
+K-Means;01_resultado_total_kmeans.csv;143561;21357;165268;143561;smp_continuo|cluster_kmeans|distancia_centroide
+DBSCAN;01_resultado_total_dbscan.csv;143561;21357;165268;143561;smp_continuo|cluster_dbscan|es_nucleo_dbscan|distancia_k_dbscan
+HDBSCAN;01_resultado_total_hdbscan.csv;143561;21357;165268;143561;smp_continuo|cluster_hdbscan|fuerza_hdbscan|glosh_hdbscan
+Isolation Forest;01_resultado_total_isolation_forest.csv;143561;21357;165268;143561;smp_continuo|alerta_isolation_forest|puntuacion_anomalia_if|decision_function_if

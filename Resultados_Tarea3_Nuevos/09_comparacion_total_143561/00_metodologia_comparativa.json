@@ -1,0 +1,22 @@
+{
+  "registros_comparados": 143561,
+  "algoritmos": [
+    "kmeans",
+    "dbscan",
+    "hdbscan",
+    "isolation_forest"
+  ],
+  "total_esperado": 143561,
+  "division": "ninguna; comparacion de resultados en muestra",
+  "no_reentrena": true,
+  "shap_es_muestra": true,
+  "shap_n": 80,
+  "falta_algoritmo": [],
+  "advertencias": [
+    "Los parametros del JSON de trazabilidad son globales y pudieron ser sobrescritos: no demuestran los parametros exactos de cada CSV.",
+    "Los indicadores SSE y silueta proceden del barrido K y no demuestran que sea exactamente el mismo ajuste que las etiquetas CSV.",
+    "Parametros HDBSCAN verificados con firma de etiquetas: min_cluster_size=100, min_samples=5, seleccion=leaf, escalado=estandar."
+  ],
+  "carpeta_origen": "C:\\Users\\isigb\\OneDrive\\Desktop\\Taller-IA-Isidora-Allyson\\Resultados_Tarea3_Nuevos\\08_ejecucion_total_143561",
+  "diagnosticos_adicionales": 5
+}

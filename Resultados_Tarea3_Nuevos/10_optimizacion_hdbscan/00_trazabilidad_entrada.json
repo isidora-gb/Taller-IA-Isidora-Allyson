@@ -1,0 +1,18 @@
+{
+  "sha256_origen_08": "23c89bcd909fbfc2f35b27fa52be53a95a12f2e5037dd24afd823b5e7b8fb94d",
+  "variable_names": [
+    "AcelX1_SisGenEol",
+    "AcelY1_SisGenEol",
+    "AcelZ1_SisGenEol",
+    "GiroX_SisGenEol",
+    "GiroY_SisGenEol",
+    "GiroZ_SisGenEol",
+    "MagneX_SisGenEol",
+    "MagneY_SisGenEol",
+    "MagneZ_SisGenEol",
+    "Ter_SisGenEol"
+  ],
+  "registros": 143561,
+  "division": "70/15/15 cronologica",
+  "motor": "boruvka_kdtree"
+}

@@ -1,0 +1,6 @@
+﻿modelo;indicador;valor;fuente;nota
+K-Means;SSE barrido K-Means;1303551.41978;07_barrido_kmeans_completo.csv;"Exploratorio; no audita que sea el mismo ajuste guardado"
+K-Means;Silueta estimada en muestra (barrido);0.0932183403458;07_barrido_kmeans_completo.csv;"Exploratorio; no audita que sea el mismo ajuste guardado"
+K-Means;Inercia K/K=1 (%);90.8012217652;07_barrido_kmeans_completo.csv;"Exploratorio; no audita que sea el mismo ajuste guardado"
+HDBSCAN;min_cluster_size;100;00_modelo_total_hdbscan_meta.json;Verificado por hash contra las etiquetas leidas
+HDBSCAN;min_samples;5;00_modelo_total_hdbscan_meta.json;Verificado por hash contra las etiquetas leidas

@@ -1,0 +1,3 @@
+﻿cluster_kmeans;registros;n_ruido_dbscan;pct_ruido_dbscan;n_ruido_hdbscan;pct_ruido_hdbscan;n_alerta_isolation_forest;pct_alerta_isolation_forest
+0;72072;16070;22.2971472971;71798;99.6198246198;6074;8.42768342768
+1;71489;15755;22.0383555512;71313;99.7538082782;5709;7.985843976

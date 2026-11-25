@@ -1,0 +1,16 @@
+{
+  "criterio": "Reproducibilidad de puntuaciones/ranking y top-1/2% en validacion, NO precision diagnostica",
+  "comparaciones": 16,
+  "configuraciones_perfil": 16,
+  "barrido_perfil_completo": true,
+  "escala": "estandar",
+  "candidato_orientativo": "estandar_a500_m2048",
+  "id_lider_ranking_aunque_no_cumpla_filtros": "estandar_a500_m2048",
+  "filtros_exploratorios": {
+    "spearman_val_min": 0.98,
+    "jaccard_top1_min": 0.6,
+    "jaccard_top2_min": 0.7
+  },
+  "prueba_utilizada_para_seleccionar": false,
+  "advertencia": "No existe etiqueta de falla; ninguna configuracion demuestra acierto diagnostico."
+}

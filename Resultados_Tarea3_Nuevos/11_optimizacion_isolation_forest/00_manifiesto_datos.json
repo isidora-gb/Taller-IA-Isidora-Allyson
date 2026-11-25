@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "escala": "estandar",
+  "modelo": "IsolationForest",
+  "n_variables": 10,
+  "particiones_train_val": {
+    "entrenamiento": "8315648edbc462c5392573504834ffe53b9d1c6fde5fe6fe40e015ec19aeb9dc",
+    "validacion": "a5e264b1cbca74ccd0b658a4f0903d77a51cce0028214f557982a6b5f8f50c1b"
+  }
+}
