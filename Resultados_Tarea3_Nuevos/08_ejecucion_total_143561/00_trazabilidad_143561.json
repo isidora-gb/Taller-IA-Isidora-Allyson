@@ -1,0 +1,33 @@
+{
+  "origen": "C:\\Users\\isigb\\OneDrive\\Desktop\\Taller-IA-Isidora-Allyson\\Datos_corregidos\\datos_multisensor_corregidos.csv",
+  "sha256_origen": "23c89bcd909fbfc2f35b27fa52be53a95a12f2e5037dd24afd823b5e7b8fb94d",
+  "registros": 143561,
+  "senales": [
+    "AcelX1_SisGenEol",
+    "AcelY1_SisGenEol",
+    "AcelZ1_SisGenEol",
+    "GiroX_SisGenEol",
+    "GiroY_SisGenEol",
+    "GiroZ_SisGenEol",
+    "MagneX_SisGenEol",
+    "MagneY_SisGenEol",
+    "MagneZ_SisGenEol",
+    "Ter_SisGenEol"
+  ],
+  "nulos_senales": 0,
+  "smp_inicial": 21357,
+  "smp_final": 165268,
+  "division": "NINGUNA; ajuste directo en el 100% de los registros",
+  "interpretacion": "Ejercicio exploratorio sobre los datos usados para el ajuste; NO es evaluacion fuera de muestra",
+  "escalado": "estandar",
+  "parametros_iniciales_exploratorios": {
+    "kmeans_k": 2,
+    "dbscan_eps": 1.423777387,
+    "dbscan_min_samples": 20,
+    "hdbscan_mcs": 100,
+    "hdbscan_min_samples": 5,
+    "hdbscan_seleccion": "leaf",
+    "if_arboles": 300,
+    "if_max_samples_por_arbol": 256
+  }
+}

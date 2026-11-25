@@ -1,0 +1,10 @@
+13 - ISOLATION FOREST MULTIVARIABLE
+Se entreno UN SOLO modelo con las 10 senales juntas.
+Se usan 100492 registros de entrenamiento, 21534 de validacion y 21535 de prueba.
+Los arboles de Isolation Forest usan submuestras internas (max_samples).
+Umbral fijo del entrenamiento o umbral automatico del metodo, segun configuracion.
+El archivo de sensibilidad muestra que las alertas dependen del umbral.
+No hay etiquetas de falla; NO se puede calcular exactitud real, recall, precision ni F1.
+SMP ordena adquisiciones, NO equivale a segundos.
+PCA solo proyecta los datos para visualizar; NO es entrada del modelo.
+Perfil de senales es descriptivo, NO causalidad ni explicacion SHAP.

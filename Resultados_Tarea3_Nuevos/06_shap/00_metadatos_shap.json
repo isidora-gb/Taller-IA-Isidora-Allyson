@@ -1,0 +1,42 @@
+{
+  "modelo_origen": "05_isolation_forest/00_modelo_isolation_forest.joblib",
+  "reentrenamiento": false,
+  "predictoras": [
+    "AcelX1_SisGenEol",
+    "AcelY1_SisGenEol",
+    "AcelZ1_SisGenEol",
+    "GiroX_SisGenEol",
+    "GiroY_SisGenEol",
+    "GiroZ_SisGenEol",
+    "MagneX_SisGenEol",
+    "MagneY_SisGenEol",
+    "MagneZ_SisGenEol",
+    "Ter_SisGenEol"
+  ],
+  "numero_predictoras": 10,
+  "escalado": "estandar",
+  "algoritmo_SHAP": "PermutationExplainer; masker Independent",
+  "objetivo_explicado": "-IsolationForest.score_samples (mayor=mas anomalo)",
+  "max_evals_por_explicacion": 63,
+  "permutaciones_por_registro": 3,
+  "fondo_muestras_entrenamiento": 25,
+  "muestreo": "aleatorio estratificado segun alerta y particion, semilla fija; incluye el score mas alto en prueba",
+  "registros_totales": 143561,
+  "registros_explicados": 120,
+  "registros_explicados_por_conjunto": {
+    "entrenamiento": 40,
+    "validacion": 40,
+    "prueba": 40
+  },
+  "importancia": "estimacion estratificada reponderada por prevalencia real en cada particion y volumen de la particion (NO exhaustiva)",
+  "error_aditividad_maximo": 4.992672941739329e-13,
+  "duracion_segundos": 17.314785499940626,
+  "limitaciones": [
+    "Las importancias se estiman en una muestra, no en todos los registros.",
+    "SHAP depende de la distribucion del fondo y del modelo.",
+    "El masker independiente puede crear combinaciones no observadas si hay dependencia entre variables.",
+    "El signo SHAP es relativo al score del modelo, no indica gravedad fisica.",
+    "No hay etiquetas de falla; no equivale a averias confirmadas.",
+    "SMP ordena adquisiciones, no representa segundos."
+  ]
+}

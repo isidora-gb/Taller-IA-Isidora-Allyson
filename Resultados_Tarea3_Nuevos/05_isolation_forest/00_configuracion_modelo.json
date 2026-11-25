@@ -1,0 +1,40 @@
+{
+  "algoritmo": "IsolationForest",
+  "version": 1,
+  "variables": [
+    "AcelX1_SisGenEol",
+    "AcelY1_SisGenEol",
+    "AcelZ1_SisGenEol",
+    "GiroX_SisGenEol",
+    "GiroY_SisGenEol",
+    "GiroZ_SisGenEol",
+    "MagneX_SisGenEol",
+    "MagneY_SisGenEol",
+    "MagneZ_SisGenEol",
+    "Ter_SisGenEol"
+  ],
+  "n_variables": 10,
+  "division": {
+    "entrenamiento": 100492,
+    "validacion": 21534,
+    "prueba": 21535
+  },
+  "entrenado_unicamente_en": "entrenamiento cronologico",
+  "escalado": "estandar",
+  "n_estimators": 300,
+  "max_samples_pedido": 256,
+  "max_samples_real_por_arbol": 256,
+  "max_features": 1.0,
+  "semilla": 42,
+  "contamination_modelo": "auto",
+  "umbral_metodo": "auto",
+  "fraccion_referencia_solo_si_cuantil": null,
+  "umbral_score_mayor_mas_atipico": 0.5,
+  "offset_scikit_learn": -0.5,
+  "segundos_ajuste": 1.5807002000510693,
+  "smp_no_predictor": true,
+  "pca_solo_visualizacion": true,
+  "sin_etiquetas_de_falla": true,
+  "advertencia": "Alerta NO significa falla real ni necesidad de mantenimiento; no hay ground truth.",
+  "aclaracion_submuestras": "Todos los registros se pasan a fit; cada arbol usa max_samples aleatorios internos."
+}

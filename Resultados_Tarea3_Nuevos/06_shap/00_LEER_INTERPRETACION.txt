@@ -1,0 +1,11 @@
+CODIGO 14 - SHAP PARA EL MISMO ISOLATION FOREST DE 10 SENALES
+Modelo 13: 300 arboles / max_samples 256. NO REENTRENADO.
+Entrenamiento: 100492; validacion: 21534; prueba: 21535.
+SHAP explicado: 120 registros MUESTREADOS; no confundir con 143561 procesados por el modelo 13.
+Fondo SHAP aleatorio del entrenamiento; muestra de explicaciones estratificada.
+Interpretacion: SHAP positivo incrementa puntuacion de anomalia relativa al fondo;
+SHAP negativo disminuye puntuacion de anomalia relativa al fondo.
+Importancia = media |SHAP| estimada reponderando muestra por prevalencia real y tamano de cada conjunto.
+Familias del grafico 09 son agregaciones de 10 variables del modelo UNICO, NO modelos separados.
+No son causalidad mecanica, etiquetas confirmadas, ni criterios ISO de mantenimiento.
+SMP NO es tiempo en segundos.

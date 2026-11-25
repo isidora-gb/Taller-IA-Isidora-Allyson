@@ -1,0 +1,2 @@
+﻿algoritmo;estado;registros_utilizados;variables;grupos;ruido_o_alertas;porcentaje_ruido_o_alertas;detalles
+hdbscan;OK;143561;10;2;143111;99.6865443958;"{""persistencia_media"": 0.00974718635390414, ""segundos_ajuste_y_puntuacion"": 126.429}"

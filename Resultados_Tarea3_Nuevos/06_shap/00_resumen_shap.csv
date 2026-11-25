@@ -1,0 +1,4 @@
+﻿conjunto;registros_totales;alertas_totales;alertas_pct;registros_explicados;alertas_explicadas;sin_alerta_explicados;error_maximo_aditividad
+entrenamiento;100492;8377;8.33598694423;40;20;20;4.94770890924e-13
+validacion;21534;3495;16.2301476734;40;20;20;4.88054041625e-13
+prueba;21535;4887;22.693289993;40;20;20;4.99267294174e-13

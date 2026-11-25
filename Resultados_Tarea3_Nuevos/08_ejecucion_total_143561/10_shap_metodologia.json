@@ -1,0 +1,14 @@
+{
+  "modelo": "IsolationForest entrenado con todos los 143561 registros",
+  "registros_entrenamiento": 143561,
+  "registros_explicados_shap": 80,
+  "fondo": 20,
+  "alertas_explicadas": 40,
+  "normales_explicadas": 40,
+  "prevalencia_alertas_total": 0.08207660854967574,
+  "puntuacion_explicada": "-modelo.score_samples(X) (mayor = mas atipica)",
+  "metodo": "PermutationExplainer",
+  "permutaciones": 2,
+  "maximo_error_aditividad": 2.7755575615628914e-16,
+  "limitacion": "SHAP es una muestra de explicaciones, no se calcula individualmente para todas las filas; no demuestra causa fisica."
+}

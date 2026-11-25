@@ -1,0 +1,11 @@
+{
+  "n_registros": 143561,
+  "n_senales": 10,
+  "sha256_matriz": "6fb6347986d0dd085595dec43e88399c46cde737e71f1394e1e74f7a9f0c1fb7",
+  "escalado": "estandar",
+  "min_cluster_size": 100,
+  "min_samples": 5,
+  "seleccion": "leaf",
+  "metrica": "euclidean",
+  "sha256_etiquetas": "896d0018bd65019578e311cc5f06345cdb3f1ceb36ecdc5fa5ce2a86dc60f15f"
+}

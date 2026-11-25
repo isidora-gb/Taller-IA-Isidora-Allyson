@@ -1,0 +1,31 @@
+﻿conjunto;senal;sensor_corto;familia;importancia_abs_ponderada;tasa_alertas_real_pct;registros_totales;registros_explicados
+entrenamiento;AcelX1_SisGenEol;Ac X;Acelerometro;0.00905005850552;8.33598694423;100492;40
+entrenamiento;AcelY1_SisGenEol;Ac Y;Acelerometro;0.00717000824179;8.33598694423;100492;40
+entrenamiento;AcelZ1_SisGenEol;Ac Z;Acelerometro;0.0102995116805;8.33598694423;100492;40
+entrenamiento;GiroX_SisGenEol;Gi X;Giroscopio;0.00992312850863;8.33598694423;100492;40
+entrenamiento;GiroY_SisGenEol;Gi Y;Giroscopio;0.00672759715667;8.33598694423;100492;40
+entrenamiento;GiroZ_SisGenEol;Gi Z;Giroscopio;0.00759589729983;8.33598694423;100492;40
+entrenamiento;MagneX_SisGenEol;Ma X;Magnetometro;0.00983760350871;8.33598694423;100492;40
+entrenamiento;MagneY_SisGenEol;Ma Y;Magnetometro;0.00583249494152;8.33598694423;100492;40
+entrenamiento;MagneZ_SisGenEol;Ma Z;Magnetometro;0.00627750462498;8.33598694423;100492;40
+entrenamiento;Ter_SisGenEol;Temp;Temperatura;0.00659797839808;8.33598694423;100492;40
+validacion;AcelX1_SisGenEol;Ac X;Acelerometro;0.00808545569894;16.2301476734;21534;40
+validacion;AcelY1_SisGenEol;Ac Y;Acelerometro;0.00635952660955;16.2301476734;21534;40
+validacion;AcelZ1_SisGenEol;Ac Z;Acelerometro;0.00943473283043;16.2301476734;21534;40
+validacion;GiroX_SisGenEol;Gi X;Giroscopio;0.0106264809666;16.2301476734;21534;40
+validacion;GiroY_SisGenEol;Gi Y;Giroscopio;0.0059167582795;16.2301476734;21534;40
+validacion;GiroZ_SisGenEol;Gi Z;Giroscopio;0.00571550564926;16.2301476734;21534;40
+validacion;MagneX_SisGenEol;Ma X;Magnetometro;0.0086973972351;16.2301476734;21534;40
+validacion;MagneY_SisGenEol;Ma Y;Magnetometro;0.00855744938817;16.2301476734;21534;40
+validacion;MagneZ_SisGenEol;Ma Z;Magnetometro;0.00780181609497;16.2301476734;21534;40
+validacion;Ter_SisGenEol;Temp;Temperatura;0.0132190251705;16.2301476734;21534;40
+prueba;AcelX1_SisGenEol;Ac X;Acelerometro;0.0073716802181;22.693289993;21535;40
+prueba;AcelY1_SisGenEol;Ac Y;Acelerometro;0.00682126660907;22.693289993;21535;40
+prueba;AcelZ1_SisGenEol;Ac Z;Acelerometro;0.00740505041137;22.693289993;21535;40
+prueba;GiroX_SisGenEol;Gi X;Giroscopio;0.00787830152384;22.693289993;21535;40
+prueba;GiroY_SisGenEol;Gi Y;Giroscopio;0.00783898732551;22.693289993;21535;40
+prueba;GiroZ_SisGenEol;Gi Z;Giroscopio;0.00724026807478;22.693289993;21535;40
+prueba;MagneX_SisGenEol;Ma X;Magnetometro;0.0105212468515;22.693289993;21535;40
+prueba;MagneY_SisGenEol;Ma Y;Magnetometro;0.00723530039572;22.693289993;21535;40
+prueba;MagneZ_SisGenEol;Ma Z;Magnetometro;0.00771216978681;22.693289993;21535;40
+prueba;Ter_SisGenEol;Temp;Temperatura;0.0232199547015;22.693289993;21535;40
